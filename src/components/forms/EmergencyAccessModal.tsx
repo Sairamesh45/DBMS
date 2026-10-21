@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Patient } from '../../types';
 import { dataService } from '../../services/dataService';
 import { useToast } from '../../context/ToastContext';
-import { Flame, ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 
 interface EmergencyAccessModalProps {
   isOpen: boolean;
@@ -19,7 +19,8 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
   onGrantCreated,
 }) => {
   const { showToast } = useToast();
-  const [patientId, setPatientId] = useState(patients[0]?.id || 'PT-1140');
+  const [localPatients, setLocalPatients] = useState<Patient[]>(patients);
+  const [patientId, setPatientId] = useState('');
   const [doctorId] = useState('DR-999');
   const [doctorName] = useState('Dr. Alexander Vance');
   const [hospitalLocation, setHospitalLocation] = useState('Academic Trauma Center - Resuscitation Bay 1');
@@ -28,11 +29,42 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
   const [supervisorNotified, setSupervisorNotified] = useState('Chief Medical Officer / ER Attending on call');
   const [acknowledged, setAcknowledged] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const targetPatient = patients.find(p => p.id === patientId);
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setError('');
+
+    const resolvePatients = async () => {
+      let activeList = patients;
+      if (!activeList || activeList.length === 0) {
+        try {
+          activeList = await dataService.getPatients();
+        } catch (e) {
+          console.warn('Could not load patients list:', e);
+          activeList = [];
+        }
+      }
+      setLocalPatients(activeList);
+      if (activeList.length > 0) {
+        setPatientId(prev => (prev && activeList.some(p => p.id === prev) ? prev : activeList[0].id));
+      }
+    };
+
+    resolvePatients();
+  }, [isOpen, patients]);
+
+  const activePatients = localPatients.length > 0 ? localPatients : patients;
+  const targetPatient = activePatients.find(p => p.id === patientId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!patientId) {
+      setError('Please select a target patient');
+      return;
+    }
     if (!reason.trim()) {
       setError('Clinical emergency justification is mandatory');
       return;
@@ -42,10 +74,12 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const grant = await dataService.createEmergencyAccess({
         patientId,
-        patientName: targetPatient ? targetPatient.name : 'Unknown',
+        patientName: targetPatient ? targetPatient.name : 'Unknown Patient',
         doctorId,
         doctorName,
         hospitalLocation,
@@ -67,11 +101,15 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
       setError('');
     } catch (err: any) {
       console.error(err);
+      const serverMsg = err.message || 'Could not grant emergency break-glass permission.';
+      setError(serverMsg);
       showToast({
         type: 'error',
         title: 'Emergency Override Failed',
-        message: 'Could not grant emergency break-glass permission.',
+        message: serverMsg,
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -85,8 +123,8 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Warning Callout */}
-        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5 animate-pulse" />
+        <div className="p-3.5 rounded-xl bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] text-xs flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 text-[#9e2a2b] shrink-0 mt-0.5 animate-pulse" />
           <div className="leading-relaxed">
             <span className="font-bold">CRITICAL REGULATORY NOTICE:</span> Break-glass access bypasses normal
             patient consent check. Every telemetry packet accessed under this emergency token is cryptographically
@@ -96,109 +134,106 @@ export const EmergencyAccessModal: React.FC<EmergencyAccessModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Target Patient *</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Target Patient *</label>
             <select
               value={patientId}
-              onChange={e => setPatientId(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-rose-500 focus:outline-hidden cursor-pointer"
+              onChange={e => {
+                setPatientId(e.target.value);
+                if (error) setError('');
+              }}
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
             >
-              {patients.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.name} ({p.id}) — {p.ward} [{p.monitoringStatus}]
-                </option>
-              ))}
+              {activePatients.length === 0 ? (
+                <option value="">Loading patients...</option>
+              ) : (
+                activePatients.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.id}) • {p.ward}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Temporary Session Window</label>
-            <select
-              value={durationMinutes}
-              onChange={e => setDurationMinutes(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-rose-500 focus:outline-hidden cursor-pointer"
-            >
-              <option value={15}>15 Minutes (Immediate Resuscitation)</option>
-              <option value={30}>30 Minutes (Standard Code Blue Window)</option>
-              <option value={60}>60 Minutes (Trauma Surgery Stabilization)</option>
-            </select>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Emergency Attending Doctor</label>
+            <input
+              type="text"
+              value={`${doctorName} (${doctorId})`}
+              disabled
+              className="w-full px-3 py-2 rounded-xl bg-[#f5efeb] border border-[#e6dfd5] text-[#78716c] text-xs"
+            />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Clinical Override Justification *</label>
+          <textarea
+            rows={3}
+            value={reason}
+            onChange={e => setReason(e.target.value)}
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden font-sans"
+            placeholder="Document clinical necessity (e.g. cardiac arrest, trauma resuscitation)..."
+          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Attending Physician</label>
-            <input
-              type="text"
-              value={`${doctorId} • ${doctorName}`}
-              disabled
-              className="w-full px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 font-mono text-xs"
-            />
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Session Duration</label>
+            <select
+              value={durationMinutes}
+              onChange={e => setDurationMinutes(parseInt(e.target.value, 10))}
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
+            >
+              <option value={15}>15 Minutes (Rapid Triage)</option>
+              <option value={30}>30 Minutes (Standard Trauma Bay)</option>
+              <option value={60}>60 Minutes (Operating Suite Extended)</option>
+            </select>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Hospital Trauma Location</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">ER Supervisor Notified</label>
             <input
               type="text"
-              value={hospitalLocation}
-              onChange={e => setHospitalLocation(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-rose-500 focus:outline-hidden"
+              value={supervisorNotified}
+              onChange={e => setSupervisorNotified(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
             />
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            Clinical Emergency Justification *
-          </label>
-          <textarea
-            rows={2}
-            value={reason}
-            onChange={e => setReason(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-rose-500 focus:outline-hidden"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Supervisor Notification Channel</label>
+        {/* Legal Acknowledgment */}
+        <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] flex items-start gap-2.5">
           <input
-            type="text"
-            value={supervisorNotified}
-            onChange={e => setSupervisorNotified(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-rose-500 focus:outline-hidden"
+            type="checkbox"
+            id="acknowledge"
+            checked={acknowledged}
+            onChange={e => setAcknowledged(e.target.checked)}
+            className="mt-0.5 accent-[#9e2a2b] cursor-pointer"
           />
-        </div>
-
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
-          <label className="flex items-start gap-2.5 text-xs text-slate-700 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={acknowledged}
-              onChange={e => setAcknowledged(e.target.checked)}
-              className="accent-rose-600 mt-0.5"
-            />
-            <span>
-              I certify under hospital clinical emergency regulations that this override is necessary to prevent imminent
-              patient mortality, and I accept full audit accountability.
-            </span>
+          <label htmlFor="acknowledge" className="text-[11px] text-[#2c2623] cursor-pointer">
+            I certify that this break-glass override is medically required under emergency clinical protocol.
+            I understand this session is immutably timestamped on the consortium blockchain and subject to immediate
+            audit review.
           </label>
         </div>
 
-        {error && <p className="text-[11px] text-rose-600 font-semibold">{error}</p>}
+        {error && <p className="text-xs text-[#9e2a2b] font-medium">{error}</p>}
 
-        <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-200">
+        <div className="pt-2 flex items-center justify-end gap-3 border-t border-[#e6dfd5]">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-[#f5efeb] text-[#78716c] border border-[#d8cfc2] text-xs font-medium transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#9e2a2b] hover:bg-[#7e1f20] text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
           >
-            <Flame className="w-4 h-4" />
-            <span>AUTHORIZE BREAK-GLASS</span>
+            <ShieldAlert className="w-4 h-4" />
+            <span>Authorize Break-Glass Override</span>
           </button>
         </div>
       </form>

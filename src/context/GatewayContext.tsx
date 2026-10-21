@@ -38,6 +38,14 @@ export const GatewayProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const currentPatient = patients.find(p => p.id === selectedPatientId);
   const currentSensor = sensors.find(s => s.id === selectedSensorId);
 
+  // When switching to Patient persona, lock context to Eleanor Vance (PT-1042)
+  useEffect(() => {
+    if (activeRole === 'Patient') {
+      setSelectedPatientId('PT-1042');
+      setSelectedSensorId('SNR-ECG-01');
+    }
+  }, [activeRole]);
+
   useEffect(() => {
     if (currentPatient && currentPatient.assignedSensors.length > 0) {
       if (!currentPatient.assignedSensors.includes(selectedSensorId)) {

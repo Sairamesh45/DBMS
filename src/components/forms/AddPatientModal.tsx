@@ -101,37 +101,37 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Full Name *</label>
             <input
               type="text"
               placeholder="e.g. Robert Hansen"
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
             />
-            {errors.name && <p className="text-[11px] text-rose-600 mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-[11px] text-[#9e2a2b] mt-1">{errors.name}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Age *</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Age *</label>
             <input
               type="number"
               placeholder="e.g. 58"
               value={age}
               onChange={e => setAge(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
             />
-            {errors.age && <p className="text-[11px] text-rose-600 mt-1">{errors.age}</p>}
+            {errors.age && <p className="text-[11px] text-[#9e2a2b] mt-1">{errors.age}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Gender</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Gender</label>
             <select
               value={gender}
               onChange={e => setGender(e.target.value as any)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -140,11 +140,11 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Blood Group</label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Blood Group</label>
             <select
               value={bloodGroup}
               onChange={e => setBloodGroup(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
             >
               {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map(bg => (
                 <option key={bg} value={bg}>
@@ -156,56 +156,56 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Primary Condition / Diagnosis *</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Primary Condition / Diagnosis *</label>
           <input
             type="text"
             placeholder="e.g. Congestive Heart Failure, NYHA Class II"
             value={condition}
             onChange={e => setCondition(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
           />
-          {errors.condition && <p className="text-[11px] text-rose-600 mt-1">{errors.condition}</p>}
+          {errors.condition && <p className="text-[11px] text-[#9e2a2b] mt-1">{errors.condition}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Hospital Ward & Bed *</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Hospital Ward & Bed *</label>
           <input
             type="text"
             placeholder="e.g. Cardio-Thoracic Ward Bed 09"
             value={ward}
             onChange={e => setWard(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
           />
-          {errors.ward && <p className="text-[11px] text-rose-600 mt-1">{errors.ward}</p>}
+          {errors.ward && <p className="text-[11px] text-[#9e2a2b] mt-1">{errors.ward}</p>}
         </div>
 
         {/* Assigned sensors */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1.5">
             Assign Available Medical Hardware Sensors
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-36 overflow-y-auto p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-36 overflow-y-auto p-2 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
             {availableSensors.map(sensor => {
               const isSelected = selectedSensors.includes(sensor.id);
               return (
                 <div
                   key={sensor.id}
                   onClick={() => toggleSensor(sensor.id)}
-                  className={`cursor-pointer flex items-center justify-between p-2 rounded border text-xs transition-colors ${
+                  className={`cursor-pointer flex items-center justify-between p-2 rounded-lg border text-xs transition-colors ${
                     isSelected
-                      ? 'bg-blue-50 border-blue-500 text-blue-900'
-                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                      ? 'bg-[#f5efeb] border-[#8c6d46] text-[#2c2623]'
+                      : 'bg-white border-[#e6dfd5] text-[#78716c] hover:border-[#d8cfc2]'
                   }`}
                 >
                   <div className="truncate">
-                    <div className="font-semibold text-slate-900">{sensor.id}</div>
-                    <div className="text-[10px] text-slate-500">{sensor.type}</div>
+                    <div className="font-semibold text-[#2c2623]">{sensor.id}</div>
+                    <div className="text-[10px] text-[#78716c]">{sensor.type}</div>
                   </div>
                   <input
                     type="checkbox"
                     checked={isSelected}
                     readOnly
-                    className="accent-blue-600 pointer-events-none"
+                    className="accent-[#8c6d46] pointer-events-none"
                   />
                 </div>
               );
@@ -214,27 +214,27 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Clinical Notes (Optional)</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Clinical Notes (Optional)</label>
           <textarea
             rows={2}
             placeholder="Additional baseline notes or precautions..."
             value={notes}
             onChange={e => setNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
           />
         </div>
 
-        <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-200">
+        <div className="pt-2 flex items-center justify-end gap-3 border-t border-[#e6dfd5]">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-[#f5efeb] text-[#78716c] border border-[#d8cfc2] text-xs font-medium transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#8c6d46] hover:bg-[#745733] text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer"
           >
             Register Patient
           </button>

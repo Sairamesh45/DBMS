@@ -29,21 +29,21 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative overflow-hidden rounded-xl border border-slate-800/90 bg-slate-900/60 p-4 backdrop-blur-md transition-all duration-200 ${
-        onClick ? 'cursor-pointer hover:border-cyan-500/40 hover:bg-slate-900/80 hover:shadow-lg hover:shadow-cyan-950/20' : ''
+      className={`relative overflow-hidden rounded-2xl border border-[#e6dfd5] bg-white p-4 shadow-xs transition-all duration-200 ${
+        onClick ? 'cursor-pointer hover:border-[#8c6d46]/50 hover:shadow-sm' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-slate-400 truncate">{title}</p>
+          <p className="text-xs font-medium text-[#78716c] truncate">{title}</p>
           <div className="mt-1.5 flex items-baseline gap-2">
-            <span className="text-2xl font-bold tracking-tight text-slate-100 font-mono">
+            <span className="text-2xl font-bold tracking-tight text-[#2c2623] font-mono">
               {value}
             </span>
             {trend && (
               <span
                 className={`text-xs font-mono font-medium ${
-                  trend.isPositive ? 'text-emerald-400' : 'text-rose-400'
+                  trend.isPositive ? 'text-[#2d6e42]' : 'text-[#9e2a2b]'
                 }`}
               >
                 {trend.isPositive ? '↑' : '↓'} {trend.value}
@@ -51,26 +51,24 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             )}
           </div>
           {subtitle && (
-            <p className="mt-1 text-xs text-slate-400 truncate">{subtitle}</p>
+            <p className="mt-1 text-xs text-[#78716c] truncate">{subtitle}</p>
           )}
         </div>
 
         <div className="flex flex-col items-end gap-2 shrink-0">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-cyan-950/50 border border-cyan-800/30 text-cyan-400">
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#f5efeb] border border-[#d8cfc2] text-[#8c6d46]">
             <Icon className="w-5 h-5" />
           </div>
           {badge && (
             <span
-              className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border ${
+              className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
                 badge.variant === 'success'
-                  ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30'
+                  ? 'bg-[#f2f7f3] text-[#2d6e42] border-[#c6dcce]'
                   : badge.variant === 'warning'
-                  ? 'bg-amber-950/60 text-amber-300 border-amber-500/30'
+                  ? 'bg-[#fdf8f0] text-[#b58550] border-[#f2dfbe]'
                   : badge.variant === 'danger'
-                  ? 'bg-rose-950/60 text-rose-300 border-rose-500/30'
-                  : badge.variant === 'info'
-                  ? 'bg-cyan-950/60 text-cyan-300 border-cyan-500/30'
-                  : 'bg-slate-800 text-slate-300 border-slate-700'
+                  ? 'bg-[#fdf3f3] text-[#9e2a2b] border-[#f5cacc]'
+                  : 'bg-[#faf7f2] text-[#78716c] border-[#e6dfd5]'
               }`}
             >
               {badge.text}
@@ -78,9 +76,6 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           )}
         </div>
       </div>
-
-      {/* Decorative cyber ambient bottom line */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
     </div>
   );
 };

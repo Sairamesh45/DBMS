@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  Lock,
   Radio,
 } from 'lucide-react';
 import {
@@ -29,31 +28,31 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
   // Monitoring Status
   if (status === 'Active') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 ${sizeClasses}`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-[#f2f7f3] border border-[#c6dcce] text-[#2d6e42] ${sizeClasses}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#2d6e42] animate-pulse" />
         Active
       </span>
     );
   }
   if (status === 'Critical') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-rose-50 border border-rose-200 text-rose-700 ${sizeClasses}`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] ${sizeClasses}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#9e2a2b]" />
         Critical
       </span>
     );
   }
   if (status === 'Observation') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-amber-50 border border-amber-200 text-amber-700 ${sizeClasses}`}>
-        <Radio className="w-3 h-3 text-amber-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-[#fdf8f0] border border-[#f2dfbe] text-[#b58550] ${sizeClasses}`}>
+        <Radio className="w-3 h-3 text-[#b58550]" />
         Observation
       </span>
     );
   }
   if (status === 'Inactive') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-slate-100 border border-slate-200 text-slate-600 ${sizeClasses}`}>
+      <span className={`inline-flex items-center gap-1.5 rounded-full font-medium bg-[#f5efeb] border border-[#e6dfd5] text-[#78716c] ${sizeClasses}`}>
         Inactive
       </span>
     );
@@ -62,24 +61,24 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
   // Sensor Authentication Status
   if (status === 'Authenticated') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-blue-50 border border-blue-200 text-blue-700 ${sizeClasses}`}>
-        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#f2f7f3] border border-[#c6dcce] text-[#2d6e42] ${sizeClasses}`}>
+        <ShieldCheck className="w-3.5 h-3.5 text-[#2d6e42]" />
         Authenticated
       </span>
     );
   }
   if (status === 'Pending Challenge') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-amber-50 border border-amber-200 text-amber-700 ${sizeClasses}`}>
-        <Clock className="w-3.5 h-3.5 text-amber-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf8f0] border border-[#f2dfbe] text-[#b58550] ${sizeClasses}`}>
+        <Clock className="w-3.5 h-3.5 text-[#b58550]" />
         Pending Challenge
       </span>
     );
   }
   if (status === 'Failed Challenge' || status === 'Quarantined' || status === 'Blocked') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-rose-50 border border-rose-200 text-rose-700 ${sizeClasses}`}>
-        <ShieldX className="w-3.5 h-3.5 text-rose-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] ${sizeClasses}`}>
+        <ShieldX className="w-3.5 h-3.5 text-[#9e2a2b]" />
         {status}
       </span>
     );
@@ -88,50 +87,49 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
   // Anchoring Status
   if (status === 'Anchored') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-blue-50 border border-blue-200 text-blue-700 ${sizeClasses}`}>
-        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#f5efeb] border border-[#d8cfc2] text-[#8c6d46] ${sizeClasses}`}>
+        <CheckCircle2 className="w-3.5 h-3.5 text-[#8c6d46]" />
         Anchored
       </span>
     );
   }
   if (status === 'Priority Anchored') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-purple-50 border border-purple-200 text-purple-700 ${sizeClasses}`}>
-        <ShieldAlert className="w-3.5 h-3.5 text-purple-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-bold bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] ${sizeClasses}`}>
+        <ShieldAlert className="w-3.5 h-3.5 text-[#9e2a2b]" />
         Priority Anchored
       </span>
     );
   }
   if (status === 'Pending Batch') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-slate-100 border border-slate-200 text-slate-700 ${sizeClasses}`}>
-        <Clock className="w-3.5 h-3.5 text-slate-500" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf8f0] border border-[#f2dfbe] text-[#b58550] ${sizeClasses}`}>
+        <Clock className="w-3.5 h-3.5 text-[#b58550]" />
         Pending Batch
       </span>
     );
   }
 
-  // Access Status
+  // Access Control Status
   if (status === 'Approved') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 ${sizeClasses}`}>
-        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#f2f7f3] border border-[#c6dcce] text-[#2d6e42] ${sizeClasses}`}>
+        <CheckCircle2 className="w-3.5 h-3.5 text-[#2d6e42]" />
         Approved
       </span>
     );
   }
   if (status === 'Pending') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-amber-50 border border-amber-200 text-amber-700 ${sizeClasses}`}>
-        <Clock className="w-3.5 h-3.5 text-amber-600" />
-        Pending
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf8f0] border border-[#f2dfbe] text-[#b58550] ${sizeClasses}`}>
+        <Clock className="w-3.5 h-3.5 text-[#b58550]" />
+        Pending Review
       </span>
     );
   }
   if (status === 'Rejected' || status === 'Revoked') {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-rose-50 border border-rose-200 text-rose-700 ${sizeClasses}`}>
-        <Lock className="w-3.5 h-3.5 text-rose-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] ${sizeClasses}`}>
         {status}
       </span>
     );
@@ -140,40 +138,31 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
   // Gateway Decisions
   if (status.includes('Normal')) {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 ${sizeClasses}`}>
-        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#f2f7f3] border border-[#c6dcce] text-[#2d6e42] ${sizeClasses}`}>
+        <CheckCircle2 className="w-3.5 h-3.5 text-[#2d6e42]" />
         {status}
       </span>
     );
   }
   if (status.includes('Poor Signal')) {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-amber-50 border border-amber-200 text-amber-700 ${sizeClasses}`}>
-        <AlertTriangle className="w-3 h-3 text-amber-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-medium bg-[#fdf8f0] border border-[#f2dfbe] text-[#b58550] ${sizeClasses}`}>
+        <AlertTriangle className="w-3.5 h-3.5 text-[#b58550]" />
         {status}
       </span>
     );
   }
-  if (status.includes('Abnormal') || status.includes('Repeated Anomaly')) {
+  if (status.includes('Abnormal') || status.includes('Unauthorized') || status.includes('Repeated')) {
     return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-rose-50 border border-rose-200 text-rose-700 ${sizeClasses}`}>
-        <ShieldAlert className="w-3 h-3 text-rose-600" />
-        {status}
-      </span>
-    );
-  }
-  if (status.includes('Unauthorized')) {
-    return (
-      <span className={`inline-flex items-center gap-1.5 rounded-md font-medium bg-rose-50 border border-rose-200 text-rose-700 ${sizeClasses}`}>
-        <ShieldX className="w-3 h-3 text-rose-600" />
+      <span className={`inline-flex items-center gap-1.5 rounded-lg font-bold bg-[#fdf3f3] border border-[#f5cacc] text-[#9e2a2b] ${sizeClasses}`}>
+        <ShieldAlert className="w-3.5 h-3.5 text-[#9e2a2b]" />
         {status}
       </span>
     );
   }
 
-  // Default fallback badge
   return (
-    <span className={`inline-flex items-center gap-1 rounded-md font-medium bg-slate-100 border border-slate-200 text-slate-700 ${sizeClasses}`}>
+    <span className={`inline-flex items-center rounded-lg font-medium bg-[#faf7f2] border border-[#e6dfd5] text-[#2c2623] ${sizeClasses}`}>
       {status}
     </span>
   );

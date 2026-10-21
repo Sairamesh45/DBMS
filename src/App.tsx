@@ -12,6 +12,7 @@ import { BlockchainPage } from './pages/BlockchainPage';
 import { AccessControlPage } from './pages/AccessControlPage';
 import { EmergencyAccessPage } from './pages/EmergencyAccessPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
+import { MonitoringPage } from './pages/MonitoringPage';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
             <Route path="/" element={<AppLayout />}>
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="monitoring" element={<MonitoringPage />} />
               <Route path="patients" element={<PatientsPage />} />
               <Route path="sensors" element={<SensorsPage />} />
               <Route path="trust-analysis" element={<TrustAnalysisPage />} />
@@ -30,7 +32,6 @@ export function App() {
               <Route path="access-control" element={<AccessControlPage />} />
               <Route path="emergency-access" element={<EmergencyAccessPage />} />
               <Route path="audit-logs" element={<AuditLogsPage />} />
-              <Route path="monitoring" element={<Navigate to="/dashboard" replace />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>
           </Routes>

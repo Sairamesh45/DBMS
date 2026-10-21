@@ -7,7 +7,6 @@ import {
   Lock,
   UserCheck,
   Filter,
-  FileCheck,
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
 import { AccessRequest, Patient } from '../types';
@@ -18,7 +17,7 @@ import { useToast } from '../context/ToastContext';
 
 export const AccessControlPage: React.FC = () => {
   const { showToast } = useToast();
-  const { activeRole, refreshTrigger, triggerRefresh } = useGateway();
+  const { activeRole, selectedPatientId, refreshTrigger, triggerRefresh } = useGateway();
 
   const [requests, setRequests] = useState<AccessRequest[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -74,7 +73,15 @@ export const AccessControlPage: React.FC = () => {
     }
   };
 
-  const filteredRequests = requests.filter(r => {
+  // Role-based filtering: Patients only see authorizations related to their own patient ID
+  const relevantRequests = requests.filter(r => {
+    if (activeRole === 'Patient') {
+      return r.patientId === selectedPatientId || r.patientId === 'PT-1042';
+    }
+    return true;
+  });
+
+  const filteredRequests = relevantRequests.filter(r => {
     return filterStatus === 'ALL' || r.status === filterStatus;
   });
 
@@ -83,62 +90,77 @@ export const AccessControlPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-            <KeyRound className="w-5 h-5 text-blue-600" />
-            Medical Access Control & Patient Consent
+          <h1 className="text-xl font-bold tracking-tight text-[#2c2623] flex items-center gap-2">
+            <KeyRound className="w-5 h-5 text-[#8c6d46]" />
+            {activeRole === 'Patient'
+              ? 'My Informed Consent & Data Sharing Policies'
+              : 'Medical Access Control & Patient Consent'}
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Role-based access matrix governing clinical telemetric streams with cryptographic consent policies
+          <p className="text-xs text-[#78716c] mt-1">
+            {activeRole === 'Patient'
+              ? 'Manage and grant consent for clinical doctors requesting access to your real-time ECG and telemetry streams'
+              : 'Role-based access matrix governing clinical telemetric streams with cryptographic consent policies'}
           </p>
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-xs shrink-0 self-start sm:self-auto cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>File Access Request</span>
-        </button>
+        {activeRole === 'Doctor' || activeRole === 'Admin' ? (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8c6d46] hover:bg-[#745733] text-white font-semibold text-xs transition-colors shadow-xs shrink-0 self-start sm:self-auto cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>File Access Request</span>
+          </button>
+        ) : activeRole === 'Patient' ? (
+          <div className="px-3.5 py-1.5 rounded-xl bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto">
+            <UserCheck className="w-4 h-4" />
+            <span>Consent Authority: Eleanor Vance</span>
+          </div>
+        ) : (
+          <div className="px-3 py-1.5 rounded-lg bg-[#f7f4ee] border border-[#e6dfd5] text-[#78716c] text-xs font-medium self-start sm:self-auto">
+            Audit Mode: Read-Only
+          </div>
+        )}
       </div>
 
       {/* Role Perspective Selector Strip */}
-      <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+      <div className="p-4 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
-          <UserCheck className="w-4 h-4 text-blue-600" />
-          <span className="font-semibold text-slate-800">Active Perspective:</span>
-          <span className="font-mono text-blue-700 font-bold px-2 py-0.5 rounded bg-blue-50 border border-blue-200">
+          <UserCheck className="w-4 h-4 text-[#8c6d46]" />
+          <span className="font-semibold text-[#2c2623]">Active Perspective:</span>
+          <span className="font-mono text-[#8c6d46] font-bold px-2 py-0.5 rounded-lg bg-[#f5efeb] border border-[#d8cfc2]">
             {activeRole} Perspective
           </span>
         </div>
-        <p className="text-slate-500 text-[11px]">
+        <p className="text-[#78716c] text-[11px]">
           {activeRole === 'Doctor' && 'As a Doctor, file telemetry access requests and monitor approved clinical streams.'}
           {activeRole === 'Admin' && 'As an Administrator, review clinical justifications and approve or revoke doctor credentials.'}
-          {activeRole === 'Patient' && 'As a Patient, manage informed consent permissions and toggle data sharing policies.'}
+          {activeRole === 'Patient' && 'As a Patient, review physician requests and grant or deny access to your private medical telemetry.'}
           {activeRole === 'Auditor' && 'As an Auditor, monitor access grants and verify compliance logs.'}
         </p>
       </div>
 
       {/* Access Requests Table */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
+      <div className="rounded-2xl border border-[#e6dfd5] bg-white p-5 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">
-              Clinical Telemetry Access Requests
+            <h3 className="text-sm font-bold text-[#2c2623]">
+              {activeRole === 'Patient' ? 'Access Requests for My Telemetry' : 'Clinical Telemetry Access Requests'}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-[#78716c] mt-0.5">
               Time-bounded granular permissions for medical sensor telemetry
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-3.5 h-3.5 text-slate-400" />
+            <Filter className="w-3.5 h-3.5 text-[#78716c]" />
             <select
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
-              className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs focus:outline-hidden cursor-pointer"
+              className="px-2.5 py-1 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
             >
               <option value="ALL">All Statuses</option>
-              <option value="Pending">Pending</option>
+              <option value="Pending">Pending Review</option>
               <option value="Approved">Approved</option>
               <option value="Rejected">Rejected</option>
               <option value="Revoked">Revoked</option>
@@ -149,88 +171,88 @@ export const AccessControlPage: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50 text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
-                <th className="py-2.5 px-3 font-mono">Request ID</th>
-                <th className="py-2.5 px-3">Requesting Clinician</th>
-                <th className="py-2.5 px-3">Target Patient</th>
-                <th className="py-2.5 px-3">Data Scope</th>
-                <th className="py-2.5 px-3">Clinical Purpose</th>
-                <th className="py-2.5 px-3">Duration</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3 text-right">Actions</th>
+              <tr className="border-b border-[#e6dfd5] text-[#78716c] text-[11px] uppercase tracking-wider font-semibold">
+                <th className="pb-2.5">Request ID</th>
+                <th className="pb-2.5">Physician</th>
+                <th className="pb-2.5">Patient</th>
+                <th className="pb-2.5">Data Scope</th>
+                <th className="pb-2.5">Duration</th>
+                <th className="pb-2.5">Status</th>
+                <th className="pb-2.5 text-right">Decisions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[#f5efeb]">
               {filteredRequests.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-slate-500">
-                    No access requests matching this filter.
+                  <td colSpan={7} className="py-6 text-center text-[#78716c]">
+                    No access requests matching criteria.
                   </td>
                 </tr>
               ) : (
                 filteredRequests.map(req => (
-                  <tr key={req.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="py-3 px-3 font-mono font-bold text-blue-600">{req.id}</td>
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-slate-900">{req.doctorName}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">{req.doctorId} • {req.doctorSpecialty}</div>
+                  <tr key={req.id} className="hover:bg-[#faf7f2] transition-colors">
+                    <td className="py-3 font-mono font-bold text-[#8c6d46]">{req.id}</td>
+                    <td className="py-3">
+                      <div className="font-semibold text-[#2c2623]">{req.doctorName}</div>
+                      <div className="text-[11px] text-[#78716c]">{req.doctorSpecialty}</div>
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-slate-800">{req.patientName}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">{req.patientId}</div>
+                    <td className="py-3">
+                      <div className="font-semibold text-[#2c2623]">{req.patientName}</div>
+                      <div className="text-[11px] text-[#78716c] font-mono">{req.patientId}</div>
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3">
                       <div className="flex flex-wrap gap-1 max-w-xs">
-                        {req.categories.map(cat => (
+                        {req.categories.map((cat, i) => (
                           <span
-                            key={cat}
-                            className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-100 border border-slate-200 text-slate-700"
+                            key={i}
+                            className="px-1.5 py-0.5 rounded-lg text-[10px] bg-[#faf7f2] border border-[#e6dfd5] text-[#78716c]"
                           >
                             {cat}
                           </span>
                         ))}
                       </div>
+                      <div className="text-[11px] text-[#78716c] italic mt-0.5 max-w-xs truncate">
+                        "{req.purpose}"
+                      </div>
                     </td>
-                    <td className="py-3 px-3 text-slate-600 text-xs max-w-xs truncate" title={req.purpose}>
-                      {req.purpose}
-                    </td>
-                    <td className="py-3 px-3 font-mono text-slate-800 font-bold">
-                      {req.requestedDurationHours} Hours
-                    </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3 font-mono text-[#78716c]">{req.requestedDurationHours}h</td>
+                    <td className="py-3">
                       <StatusBadge status={req.status} size="sm" />
                     </td>
-                    <td className="py-3 px-3 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        {req.status === 'Pending' ? (
-                          <>
+                    <td className="py-3 text-right">
+                      {req.status === 'Pending' ? (
+                        (activeRole === 'Admin' || activeRole === 'Patient') ? (
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => handleApprove(req.id)}
-                              className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-[#f2f7f3] hover:bg-[#e2ede4] text-[#2d6e42] border border-[#c6dcce] text-[11px] font-semibold cursor-pointer transition-colors"
                             >
-                              <CheckCircle2 className="w-3 h-3" />
-                              <span>Approve</span>
+                              Approve
                             </button>
                             <button
                               onClick={() => handleReject(req.id)}
-                              className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-[#fdf3f3] hover:bg-[#fae4e5] text-[#9e2a2b] border border-[#f5cacc] text-[11px] font-semibold cursor-pointer transition-colors"
                             >
-                              <XCircle className="w-3 h-3" />
-                              <span>Reject</span>
+                              Reject
                             </button>
-                          </>
-                        ) : req.status === 'Approved' ? (
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-[#78716c] italic">Pending Approval</span>
+                        )
+                      ) : req.status === 'Approved' ? (
+                        (activeRole === 'Admin' || activeRole === 'Patient') ? (
                           <button
                             onClick={() => handleRevoke(req.id)}
-                            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-rose-700 text-[11px] font-semibold border border-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-[#faf7f2] hover:bg-[#fdf3f3] text-[#9e2a2b] border border-[#d8cfc2] text-[11px] font-semibold cursor-pointer transition-colors"
                           >
-                            <Lock className="w-3 h-3 text-rose-600" />
-                            <span>Revoke</span>
+                            Revoke
                           </button>
                         ) : (
-                          <span className="text-[11px] text-slate-400 font-mono">—</span>
-                        )}
-                      </div>
+                          <span className="text-[11px] text-[#2d6e42] font-semibold">Active Grant</span>
+                        )
+                      ) : (
+                        <span className="text-[11px] text-[#78716c] font-mono">Completed</span>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -240,36 +262,7 @@ export const AccessControlPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Patient Consent Rules Panel */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
-        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <FileCheck className="w-4 h-4 text-blue-600" />
-          Patient Consent Master Policies
-        </h3>
-        <p className="text-xs text-slate-500">
-          Global consent governance profiles configured by hospital ethics board and GDPR/HIPAA standards
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
-          <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <div className="font-bold text-slate-800">Electronic Health Record (EHR) Access</div>
-            <p className="text-[11px] text-slate-500">Permitted for primary care team and assigned clinical staff.</p>
-            <span className="text-emerald-600 font-mono text-[10px] font-bold block pt-1">DEFAULT ALLOWED</span>
-          </div>
-          <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <div className="font-bold text-slate-800">Emergency Break-Glass Override</div>
-            <p className="text-[11px] text-slate-500">Immediate trauma physician bypass with immutable blockchain logging.</p>
-            <span className="text-rose-600 font-mono text-[10px] font-bold block pt-1">MANDATORY PROTOCOL</span>
-          </div>
-          <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <div className="font-bold text-slate-800">Secondary AI Research Export</div>
-            <p className="text-[11px] text-slate-500">Requires explicit separate consent and cryptographic pseudonymization.</p>
-            <span className="text-amber-600 font-mono text-[10px] font-bold block pt-1">RESTRICTED OPT-IN</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Request Modal */}
+      {/* Request Access Modal */}
       <RequestAccessModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

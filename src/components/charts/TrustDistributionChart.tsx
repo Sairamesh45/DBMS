@@ -20,10 +20,10 @@ export const TrustDistributionChart: React.FC<TrustDistributionChartProps> = ({
 }) => {
   // Aggregate into buckets
   const buckets = [
-    { range: 'High Trust (90-100)', count: 0, color: '#10b981' },
-    { range: 'Good (75-89)', count: 0, color: '#06b6d4' },
-    { range: 'Degraded (50-74)', count: 0, color: '#f59e0b' },
-    { range: 'Quarantined (<50)', count: 0, color: '#ef4444' },
+    { range: 'High Trust (90-100)', count: 0, color: '#2d6e42' },
+    { range: 'Good (75-89)', count: 0, color: '#8c6d46' },
+    { range: 'Degraded (50-74)', count: 0, color: '#b58550' },
+    { range: 'Quarantined (<50)', count: 0, color: '#9e2a2b' },
   ];
 
   sensors.forEach(s => {
@@ -39,28 +39,30 @@ export const TrustDistributionChart: React.FC<TrustDistributionChartProps> = ({
         <BarChart data={buckets} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
           <XAxis
             dataKey="range"
-            tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'monospace' }}
+            tick={{ fill: '#78716c', fontSize: 10, fontFamily: 'monospace' }}
             interval={0}
             angle={-10}
             textAnchor="end"
-            stroke="#1e293b"
+            stroke="#d8cfc2"
           />
           <YAxis
             allowDecimals={false}
-            tick={{ fill: '#64748b', fontSize: 10 }}
-            stroke="#1e293b"
+            tick={{ fill: '#78716c', fontSize: 10 }}
+            stroke="#d8cfc2"
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#0f172a',
-              borderColor: '#1e293b',
-              borderRadius: '8px',
+              backgroundColor: '#ffffff',
+              borderColor: '#d8cfc2',
+              borderRadius: '12px',
               fontSize: '12px',
               fontFamily: 'monospace',
+              color: '#2c2623',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}
             formatter={(value: any) => [`${value} Sensors`, 'Count']}
           />
-          <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+          <Bar dataKey="count" radius={[6, 6, 0, 0]}>
             {buckets.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}

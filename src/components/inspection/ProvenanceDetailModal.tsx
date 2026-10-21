@@ -99,15 +99,15 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
         <div
           className={`p-4 rounded-xl border flex items-start justify-between gap-4 transition-colors ${
             !isHashMatching || isTampered
-              ? 'bg-rose-950/80 border-rose-500/60 text-rose-100 shadow-lg shadow-rose-950/40'
-              : 'bg-emerald-950/60 border-emerald-500/40 text-emerald-100'
+              ? 'bg-[#FEF2F2] border-rose-300 text-[#991B1B] shadow-xs'
+              : 'bg-[#F0FDF4] border-emerald-300 text-[#166534] shadow-xs'
           }`}
         >
           <div className="flex items-start gap-3">
             {!isHashMatching || isTampered ? (
-              <AlertOctagon className="w-6 h-6 text-rose-400 shrink-0 mt-0.5 animate-bounce" />
+              <AlertOctagon className="w-6 h-6 text-rose-600 shrink-0 mt-0.5 animate-bounce" />
             ) : (
-              <ShieldCheck className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+              <ShieldCheck className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
             )}
             <div>
               <div className="font-bold text-sm tracking-wide">
@@ -115,7 +115,7 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
                   ? 'CRITICAL INTEGRITY FAILURE: HASH MISMATCH DETECTED'
                   : 'CRYPTOGRAPHIC INTEGRITY VERIFIED (SHA-256 MATCH)'}
               </div>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+              <p className="text-xs text-[#59514B] mt-1 leading-relaxed">
                 {!isHashMatching || isTampered
                   ? 'The current record payload has been modified post-generation. The computed SHA-256 does not match the immutable anchored hash on the blockchain.'
                   : 'The current record payload matches its registered SHA-256 checksum byte-for-byte. No tampering or bit flips detected.'}
@@ -126,8 +126,8 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
             <span
               className={`px-2.5 py-1 rounded text-xs font-mono font-bold uppercase border ${
                 !isHashMatching || isTampered
-                  ? 'bg-rose-900 border-rose-400 text-white'
-                  : 'bg-emerald-900 border-emerald-400 text-white'
+                  ? 'bg-rose-100 border-rose-300 text-rose-800'
+                  : 'bg-emerald-100 border-emerald-300 text-emerald-800'
               }`}
             >
               {!isHashMatching || isTampered ? 'TAMPERED' : 'VALID'}
@@ -136,32 +136,32 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
         </div>
 
         {/* Cryptographic Hashes Comparison */}
-        <div className="space-y-3 p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs">
+        <div className="space-y-3 p-4 rounded-xl bg-[#241F1C] border border-[#3E352F] font-mono text-xs text-[#EADECB]">
           <div>
-            <div className="flex items-center justify-between text-slate-400 mb-1">
+            <div className="flex items-center justify-between text-[#A89F91] mb-1">
               <span>Anchored Blockchain Hash (Stored):</span>
               <button
                 onClick={() => handleCopyHash(record.dataHash)}
-                className="flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300"
+                className="flex items-center gap-1 text-[11px] text-[#D8CFC2] hover:text-white cursor-pointer"
               >
                 {copiedHash ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                 <span>{copiedHash ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="p-2.5 rounded bg-slate-900 text-cyan-300 border border-slate-800 break-all select-all">
+            <div className="p-2.5 rounded bg-[#1A1614] text-[#EADECB] border border-[#3E352F] break-all select-all">
               {record.dataHash}
             </div>
           </div>
 
           <div>
-            <div className="text-slate-400 mb-1">
+            <div className="text-[#A89F91] mb-1">
               Recomputed SHA-256 (from active payload):
             </div>
             <div
               className={`p-2.5 rounded border break-all select-all font-bold ${
                 isHashMatching
-                  ? 'bg-slate-900 text-emerald-300 border-emerald-500/40'
-                  : 'bg-rose-950/60 text-rose-300 border-rose-500/60'
+                  ? 'bg-[#1A1614] text-emerald-400 border-emerald-800'
+                  : 'bg-[#3D1416] text-rose-300 border-rose-700'
               }`}
             >
               {computedHash || 'Calculating Web Crypto digest...'}
@@ -169,52 +169,52 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
           </div>
 
           <div>
-            <div className="text-slate-400 mb-1">Previous-Record Hash (Chain Pointer):</div>
-            <div className="p-2 rounded bg-slate-900 text-slate-400 border border-slate-800 break-all select-all text-[11px]">
+            <div className="text-[#A89F91] mb-1">Previous-Record Hash (Chain Pointer):</div>
+            <div className="p-2 rounded bg-[#1A1614] text-[#A89F91] border border-[#3E352F] break-all select-all text-[11px]">
               {record.prevHash}
             </div>
           </div>
         </div>
 
         {/* Interactive Tampering Simulation Controls */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/80 space-y-3">
+        <div className="p-4 rounded-xl border border-[#E6DFD5] bg-[#FAF7F2] space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-400" />
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#2C2623] flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-600" />
               Demonstration Lab: Tamper & Integrity Test
             </h4>
-            <span className="text-[11px] text-slate-400 font-mono">Academic Simulation</span>
+            <span className="text-[11px] text-[#78716C] font-mono">Academic Simulation</span>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#59514B]">
             Inject unauthorized modifications into this record's medical payload to verify how the gateway
             cryptographically flags data discrepancies.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-300">Alter Clinical Order to:</label>
+              <label className="text-xs text-[#59514B]">Alter Clinical Order to:</label>
               <input
                 type="text"
                 value={tamperedPayloadValue}
                 onChange={e => setTamperedPayloadValue(e.target.value)}
-                className="w-56 px-2.5 py-1.5 rounded bg-slate-950 border border-slate-700 text-slate-100 font-mono text-xs focus:border-cyan-500 focus:outline-hidden"
+                className="w-56 px-2.5 py-1.5 rounded bg-white border border-[#D8CFC2] text-[#2C2623] font-mono text-xs focus:border-[#8C6D46] focus:outline-hidden"
               />
             </div>
 
             <button
               onClick={handleSimulateTamper}
-              className="px-3.5 py-1.5 rounded-lg bg-rose-950/80 hover:bg-rose-900/80 border border-rose-500/50 text-rose-200 text-xs font-semibold transition-colors flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <Zap className="w-3.5 h-3.5 text-rose-400" />
+              <Zap className="w-3.5 h-3.5 text-rose-600" />
               Inject Fake Clinical Data
             </button>
 
             {isTampered && (
               <button
                 onClick={handleRestore}
-                className="px-3.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900/80 border border-emerald-500/50 text-emerald-200 text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto"
+                className="px-3.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto cursor-pointer"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
+                <RotateCcw className="w-3.5 h-3.5 text-emerald-600" />
                 Restore Authentic Payload
               </button>
             )}
@@ -223,14 +223,14 @@ export const ProvenanceDetailModal: React.FC<ProvenanceDetailModalProps> = ({
 
         {/* Raw Payload Inspection */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between text-xs text-[#78716C]">
             <span className="flex items-center gap-1.5 font-medium">
-              <FileCode className="w-4 h-4 text-cyan-400" />
+              <FileCode className="w-4 h-4 text-[#8C6D46]" />
               Canonical Serialized Payload (Object hashed for Web Crypto digest):
             </span>
             <span className="font-mono text-[11px]">Deterministic JSON</span>
           </div>
-          <pre className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 font-mono text-xs overflow-x-auto max-h-48 leading-relaxed">
+          <pre className="p-3.5 rounded-xl bg-[#241F1C] border border-[#3E352F] text-[#EADECB] font-mono text-xs overflow-x-auto max-h-48 leading-relaxed">
             {JSON.stringify(record.isTampered && record.tamperedPayload ? record.tamperedPayload : record.payload, null, 2)}
           </pre>
         </div>

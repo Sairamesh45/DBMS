@@ -81,11 +81,11 @@ export const AddSensorModal: React.FC<AddSensorModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Sensor Modality / Type</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Sensor Modality / Type</label>
           <select
             value={type}
             onChange={e => setType(e.target.value as SensorType)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden cursor-pointer"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
           >
             <option value="12-Lead ECG">12-Lead ECG Telemetry</option>
             <option value="Pulse Oximeter (SpO2)">Pulse Oximeter (SpO2)</option>
@@ -96,16 +96,15 @@ export const AddSensorModal: React.FC<AddSensorModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Assign to Patient</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Assign to Patient</label>
           <select
             value={patientId}
             onChange={e => setPatientId(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:border-blue-500 focus:outline-hidden cursor-pointer"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden cursor-pointer"
           >
-            <option value="UNASSIGNED">Unassigned (Pool / Standby)</option>
             {patients.map(p => (
               <option key={p.id} value={p.id}>
-                {p.name} ({p.id}) - {p.ward}
+                {p.name} ({p.id}) • {p.ward}
               </option>
             ))}
           </select>
@@ -113,81 +112,75 @@ export const AddSensorModal: React.FC<AddSensorModalProps> = ({
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-xs font-semibold text-slate-700">
-              Simulated PUF Hardware Identity Token *
+            <label className="text-xs font-semibold text-[#2c2623]">
+              Hardware PUF Fingerprint Token (Simulated Silicon PUF)
             </label>
             <button
               type="button"
               onClick={generateNewPUF}
-              className="text-[11px] text-blue-600 hover:text-blue-700 flex items-center gap-1 font-semibold cursor-pointer"
+              className="text-[11px] text-[#8c6d46] hover:text-[#745733] font-medium flex items-center gap-1 cursor-pointer"
             >
               <Sparkles className="w-3 h-3" />
-              Generate Token
+              <span>Regenerate Token</span>
             </button>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 font-mono text-xs truncate font-semibold">
-              {hardwareFingerprint}
-            </div>
-          </div>
-          <p className="text-[11px] text-slate-500 mt-1">
-            Academic simulation: Represents silicon unclonable physical fingerprint token.
-          </p>
+          <input
+            type="text"
+            value={hardwareFingerprint}
+            onChange={e => setHardwareFingerprint(e.target.value)}
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] font-mono text-xs focus:outline-hidden"
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Initial Signal Quality ({signalQuality}%)
-            </label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Initial Signal Quality (%)</label>
             <input
-              type="range"
-              min={30}
+              type="number"
+              min={10}
               max={100}
               value={signalQuality}
               onChange={e => setSignalQuality(parseInt(e.target.value, 10))}
-              className="w-full accent-blue-600 cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Battery Level ({batteryLevel}%)
-            </label>
+            <label className="block text-xs font-semibold text-[#2c2623] mb-1">Battery Level (%)</label>
             <input
-              type="range"
-              min={10}
+              type="number"
+              min={1}
               max={100}
               value={batteryLevel}
               onChange={e => setBatteryLevel(parseInt(e.target.value, 10))}
-              className="w-full accent-blue-600 cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] text-xs focus:outline-hidden"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Firmware Build</label>
+          <label className="block text-xs font-semibold text-[#2c2623] mb-1">Firmware Build Identifier</label>
           <input
             type="text"
             value={firmwareVersion}
             onChange={e => setFirmwareVersion(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 font-mono text-xs focus:border-blue-500 focus:outline-hidden"
+            className="w-full px-3 py-2 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-[#2c2623] font-mono text-xs focus:outline-hidden"
           />
         </div>
 
-        <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-200">
+        <div className="pt-2 flex items-center justify-end gap-3 border-t border-[#e6dfd5]">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-[#f5efeb] text-[#78716c] border border-[#d8cfc2] text-xs font-medium transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#8c6d46] hover:bg-[#745733] text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer"
           >
-            Register Sensor
+            Provision Device
           </button>
         </div>
       </form>

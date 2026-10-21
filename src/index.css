@@ -1,63 +1,107 @@
 @import "tailwindcss";
 
+@theme {
+  /* Warm Beige & Earthy Clinical Palette */
+  --color-sand-50: #fdfbf7;
+  --color-sand-100: #faf7f2; /* Warm ivory page background */
+  --color-sand-200: #f5efeb; /* Soft cream surface / panel */
+  --color-sand-300: #efe8df; /* Light beige accent surface */
+  --color-sand-400: #e6dfd5; /* Subtle sand border */
+  --color-sand-500: #d8cfc2; /* Medium taupe border */
+  --color-sand-600: #b5a998; /* Muted stone */
+  --color-sand-700: #8c7f6e; /* Warm slate taupe */
+  --color-sand-800: #5c5245; /* Dark taupe */
+  --color-sand-900: #3d352b; /* Deep warm charcoal */
+  --color-sand-950: #2c2623; /* Deepest espresso text */
+
+  /* Primary Accent: Muted Tan & Warm Brown */
+  --color-tan-50: #faf6f0;
+  --color-tan-100: #f4ecdf;
+  --color-tan-200: #ebd8be;
+  --color-tan-300: #dcbe98;
+  --color-tan-400: #c89f70;
+  --color-tan-500: #b58550;
+  --color-tan-600: #8c6d46; /* Primary brand tan */
+  --color-tan-700: #745733; /* Deep warm brown hover */
+  --color-tan-800: #5a4225;
+  --color-tan-900: #423018;
+
+  /* Verified / Integrity: Muted Sage Green */
+  --color-sage-50: #f2f7f3;
+  --color-sage-100: #e2ede4;
+  --color-sage-200: #c6dcce;
+  --color-sage-500: #3d8a55;
+  --color-sage-600: #2d6e42;
+  --color-sage-700: #225633;
+
+  /* Tamper / Alert / Emergency: Deep Burgundy Crimson */
+  --color-burgundy-50: #fdf3f3;
+  --color-burgundy-100: #fae4e5;
+  --color-burgundy-200: #f5cacc;
+  --color-burgundy-500: #c2333b;
+  --color-burgundy-600: #9e2a2b;
+  --color-burgundy-700: #7e1f20;
+
+  /* Neutral Dark / Charcoal Text */
+  --color-charcoal-50: #fafaf9;
+  --color-charcoal-100: #f5f5f4;
+  --color-charcoal-200: #e7e5e4;
+  --color-charcoal-300: #d6d3d1;
+  --color-charcoal-400: #a8a29e;
+  --color-charcoal-500: #78716c; /* Secondary text */
+  --color-charcoal-600: #57534e;
+  --color-charcoal-700: #44403c;
+  --color-charcoal-800: #292524;
+  --color-charcoal-900: #1c1917;
+}
+
 @layer base {
   :root {
-    --bg-primary: #f8fafc;
-    --bg-secondary: #ffffff;
-    --bg-card: #ffffff;
-    --border-color: #e2e8f0;
-    --accent-blue: #2563eb;
-    --accent-emerald: #10b981;
+    --bg-page: #faf7f2;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f5efeb;
+    --border-subtle: #e6dfd5;
+    --border-strong: #d8cfc2;
+    --text-primary: #2c2623;
+    --text-secondary: #78716c;
+    --accent-tan: #8c6d46;
+    --accent-tan-hover: #745733;
+    --accent-sage: #2d6e42;
+    --accent-burgundy: #9e2a2b;
   }
 
   * {
-    border-color: #e2e8f0;
+    border-color: #e6dfd5;
   }
 
   body {
     margin: 0;
     padding: 0;
-    background-color: #f8fafc;
-    color: #1e293b;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #faf7f2;
+    color: #2c2623;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
   code, pre, .font-mono {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
   }
 
-  /* Custom subtle scrollbars */
+  /* Custom Warm Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #f5efeb;
   }
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #d8cfc2;
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #b5a998;
   }
 }
-
-@keyframes pulse-cyan {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.08);
-  }
-}
-
-.animate-pulse-cyan {
-  animation: pulse-cyan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-

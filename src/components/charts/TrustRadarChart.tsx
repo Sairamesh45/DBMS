@@ -38,33 +38,35 @@ export const TrustRadarChart: React.FC<TrustRadarChartProps> = ({
     <div className="w-full flex items-center justify-center" style={{ height: `${height}px` }}>
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="72%" data={data}>
-          <PolarGrid stroke="#1e293b" />
+          <PolarGrid stroke="#e6dfd5" />
           <PolarAngleAxis
             dataKey="dimension"
-            tick={{ fill: '#94a3b8', fontSize: 11, fontFamily: 'monospace' }}
+            tick={{ fill: '#78716c', fontSize: 10, fontFamily: 'monospace' }}
           />
           <PolarRadiusAxis
             angle={30}
             domain={[0, 100]}
-            tick={{ fill: '#64748b', fontSize: 9 }}
-            stroke="#334155"
+            tick={{ fill: '#78716c', fontSize: 9 }}
+            stroke="#d8cfc2"
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#0f172a',
-              borderColor: '#06b6d4',
-              borderRadius: '8px',
+              backgroundColor: '#ffffff',
+              borderColor: '#d8cfc2',
+              borderRadius: '12px',
               fontSize: '12px',
               fontFamily: 'monospace',
+              color: '#2c2623',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}
             formatter={(value: any) => [`${value} / 100`, 'Score']}
           />
           <Radar
             name="Trust Vector"
             dataKey="score"
-            stroke="#06b6d4"
-            fill="#0891b2"
-            fillOpacity={0.4}
+            stroke="#8c6d46"
+            fill="#c89f70"
+            fillOpacity={0.45}
           />
         </RadarChart>
       </ResponsiveContainer>
