@@ -69,11 +69,11 @@ export const MonitoringPage: React.FC = () => {
 
     // Draw background grid once
     const drawGrid = () => {
-      ctx.fillStyle = '#faf6f0';
+      ctx.fillStyle = '#FAF7F2';
       ctx.fillRect(0, 0, width, height);
 
       // Fine millimeter grid
-      ctx.strokeStyle = '#efe4d3';
+      ctx.strokeStyle = '#F0E7D9';
       ctx.lineWidth = 0.5;
       for (let x = 0; x < width; x += 10) {
         ctx.beginPath();
@@ -89,7 +89,7 @@ export const MonitoringPage: React.FC = () => {
       }
 
       // Major grid
-      ctx.strokeStyle = '#e0ceb5';
+      ctx.strokeStyle = '#E2D4BE';
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 50) {
         ctx.beginPath();
@@ -157,11 +157,11 @@ export const MonitoringPage: React.FC = () => {
       const nextX = (x + step) % width;
 
       // Erase trailing vertical scan line
-      ctx.fillStyle = '#faf6f0';
+      ctx.fillStyle = '#FAF7F2';
       ctx.fillRect(nextX, 0, 20, height);
 
       // Re-draw grid under the clearing beam
-      ctx.strokeStyle = '#efe4d3';
+      ctx.strokeStyle = '#F0E7D9';
       ctx.lineWidth = 0.5;
       for (let gx = Math.floor(nextX / 10) * 10; gx <= nextX + 20; gx += 10) {
         ctx.beginPath();
@@ -175,8 +175,8 @@ export const MonitoringPage: React.FC = () => {
       const currY = midY - ecgVal;
 
       // Draw ECG stroke with warm charcoal / dark brown trace
-      ctx.strokeStyle = isAbnormal ? '#9e2a2b' : isNoisy ? '#b58550' : '#2c2623';
-      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = isAbnormal ? '#BF4E3B' : isNoisy ? '#B87B32' : '#2A241E';
+      ctx.lineWidth = 2.4;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
@@ -286,29 +286,31 @@ export const MonitoringPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner: Workstation Header & Patient Selector */}
-      <div className="p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bubbly-glass p-6 md:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div>
-          <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-[#8c6d46]" />
-            <h1 className="text-lg font-bold text-[#2c2623] tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#9C7854] to-[#85613D] text-white flex items-center justify-center shadow-xs">
+              <Activity className="w-5 h-5 text-white" />
+            </div>
+            <h1 className="text-xl md:text-2xl font-bold text-[#2A241E] tracking-tight font-serif">
               Live Clinical Telemetry & Hardware Trust Workstation
             </h1>
           </div>
-          <p className="text-xs text-[#78716c] mt-0.5">
-            Real-time continuous 12-lead ECG sweep, hardware PUF stream authentication, and dynamic MDTS scoring
+          <p className="text-xs text-[#756A5C] mt-1.5 max-w-2xl leading-relaxed">
+            Real-time continuous 12-lead ECG sweep, hardware PUF stream authentication, and dynamic MDTS scoring.
           </p>
         </div>
 
         {/* Patient Selection Dropdown */}
-        <div className="flex items-center gap-3">
-          <label className="text-xs font-semibold text-[#78716c]">Monitored Inpatient:</label>
+        <div className="flex items-center gap-3 bg-white/70 border border-white/80 px-4 py-2 rounded-full shadow-2xs backdrop-blur-md">
+          <label className="text-xs font-semibold text-[#756A5C]">Monitored Inpatient:</label>
           <select
             value={selectedPatientId}
             onChange={e => setSelectedPatientId(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-[#faf7f2] border border-[#d8cfc2] text-xs font-semibold text-[#2c2623] focus:outline-hidden cursor-pointer"
+            className="bg-transparent text-xs font-bold text-[#2A241E] focus:outline-hidden cursor-pointer py-0.5"
           >
             {patients.map(p => (
-              <option key={p.id} value={p.id}>
+              <option key={p.id} value={p.id} className="bg-[#FAF7F2] text-[#2A241E]">
                 {p.name} ({p.id}) • {p.ward}
               </option>
             ))}
@@ -318,26 +320,28 @@ export const MonitoringPage: React.FC = () => {
 
       {/* Patient Status Strip */}
       {activePatient && (
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-4 rounded-xl bg-[#f5efeb] border border-[#e6dfd5] text-xs text-[#2c2623]">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5 p-4 rounded-2xl bg-white/70 border border-white/80 shadow-2xs text-xs text-[#2A241E] backdrop-blur-md">
           <div>
-            <span className="text-[#78716c] text-[11px] block">Condition:</span>
-            <span className="font-semibold truncate block">{activePatient.condition}</span>
+            <span className="text-[#756A5C] text-[11px] block font-medium">Condition:</span>
+            <span className="font-semibold truncate block mt-0.5">{activePatient.condition}</span>
           </div>
           <div>
-            <span className="text-[#78716c] text-[11px] block">Active Hardware Node:</span>
-            <span className="font-mono font-bold text-[#8c6d46] truncate block">{activeSensor?.id || 'SNR-ECG-01'}</span>
+            <span className="text-[#756A5C] text-[11px] block font-medium">Active Hardware Node:</span>
+            <span className="font-mono font-bold text-[#9C7854] truncate block mt-0.5">{activeSensor?.id || 'SNR-ECG-01'}</span>
           </div>
           <div>
-            <span className="text-[#78716c] text-[11px] block">PUF Token Identity:</span>
-            <span className="font-mono text-[11px] text-[#78716c] truncate block">{activeSensor?.hardwareFingerprint || 'PUF-VALID-0x89A'}</span>
+            <span className="text-[#756A5C] text-[11px] block font-medium">PUF Token Identity:</span>
+            <span className="font-mono text-[11px] text-[#756A5C] truncate block mt-0.5">{activeSensor?.hardwareFingerprint || 'PUF-VALID-0x89A'}</span>
           </div>
           <div>
-            <span className="text-[#78716c] text-[11px] block">Calculated MDTS:</span>
-            <span className="font-mono font-bold text-[#2d6e42] text-sm">{latestMDTS} / 100</span>
+            <span className="text-[#756A5C] text-[11px] block font-medium">Calculated MDTS:</span>
+            <span className="font-serif font-bold text-[#2D6643] text-base mt-0.5 block">{latestMDTS} / 100</span>
           </div>
           <div>
-            <span className="text-[#78716c] text-[11px] block">Gateway Action:</span>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold inline-block ${isAbnormal ? 'bg-[#fdf3f3] text-[#9e2a2b] border border-[#f5cacc]' : 'bg-[#f2f7f3] text-[#2d6e42] border border-[#c6dcce]'}`}>
+            <span className="text-[#756A5C] text-[11px] block font-medium">Gateway Action:</span>
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold inline-block mt-0.5 ${
+              isAbnormal ? 'bg-[#FDF0EE] text-[#BF4E3B] border border-[#F5CAC3]' : 'bg-[#EBF3ED] text-[#2D6643] border border-[#C8E1D2]'
+            }`}>
               {latestDecision}
             </span>
           </div>
@@ -345,14 +349,14 @@ export const MonitoringPage: React.FC = () => {
       )}
 
       {/* Main Interactive Oscilloscope Canvas Container */}
-      <div className="p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#e6dfd5]">
-          <div className="flex items-center gap-2">
-            <Radio className="w-4 h-4 text-[#8c6d46]" />
-            <h2 className="text-sm font-bold text-[#2c2623]">
+      <div className="bubbly-glass p-6 md:p-7 space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(160,140,115,0.12)]">
+          <div className="flex items-center gap-2.5">
+            <Radio className="w-4 h-4 text-[#9C7854]" />
+            <h2 className="text-base font-bold text-[#2A241E] font-serif">
               Continuous Lead II Electrocardiogram (500Hz Medical Oscilloscope)
             </h2>
-            <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-[#faf7f2] text-[#8c6d46] border border-[#d8cfc2]">
+            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-full bg-[#F8F2EA] text-[#8C6642] border border-[#EADAC7]">
               25 mm/s • 10 mm/mV
             </span>
           </div>
@@ -361,7 +365,7 @@ export const MonitoringPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsStreaming(!isStreaming)}
-              className="px-3 py-1.5 rounded-lg bg-[#faf7f2] hover:bg-[#efe8df] text-[#2c2623] border border-[#d8cfc2] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="pill-btn-secondary"
             >
               {isStreaming ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
               <span>{isStreaming ? 'Pause Sweep' : 'Resume'}</span>
@@ -369,7 +373,7 @@ export const MonitoringPage: React.FC = () => {
 
             <button
               onClick={handleSimulateAbnormal}
-              className="px-3 py-1.5 rounded-lg bg-[#fdf3f3] hover:bg-[#fae4e5] text-[#9e2a2b] border border-[#f5cacc] text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+              className="pill-btn-danger"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Simulate Ventricular Tachycardia</span>
@@ -377,15 +381,15 @@ export const MonitoringPage: React.FC = () => {
 
             <button
               onClick={handleSimulateNoise}
-              className="px-3 py-1.5 rounded-lg bg-[#faf6f0] hover:bg-[#f4ecdf] text-[#8c6d46] border border-[#ebd8be] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+              className="pill-btn-secondary"
             >
-              <Zap className="w-3.5 h-3.5" />
+              <Zap className="w-3.5 h-3.5 text-[#B87B32]" />
               <span>Simulate Lead Noise</span>
             </button>
 
             <button
               onClick={handleResetBaseline}
-              className="px-3 py-1.5 rounded-lg bg-[#f2f7f3] hover:bg-[#e2ede4] text-[#2d6e42] border border-[#c6dcce] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="pill-btn-primary"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Baseline</span>
@@ -393,8 +397,8 @@ export const MonitoringPage: React.FC = () => {
           </div>
         </div>
 
-        {/* HTML5 Canvas */}
-        <div className="relative rounded-xl border border-[#d8cfc2] overflow-hidden bg-[#faf6f0]">
+        {/* HTML5 Canvas in Bubbly Rounded Frame */}
+        <div className="relative rounded-[22px] border border-[rgba(160,140,115,0.2)] overflow-hidden bg-[#FAF7F2] shadow-inner">
           <canvas
             ref={canvasRef}
             width={960}
@@ -403,81 +407,81 @@ export const MonitoringPage: React.FC = () => {
           />
 
           {/* Real-time Overlay HUD */}
-          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-[#e6dfd5] text-[11px] font-mono text-[#2c2623] flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${isAbnormal ? 'bg-[#9e2a2b] animate-ping' : 'bg-[#2d6e42]'}`} />
+          <div className="absolute top-3.5 left-3.5 bg-white/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/90 text-[11px] font-mono text-[#2A241E] flex items-center gap-2 shadow-xs">
+            <span className={`w-2 h-2 rounded-full ${isAbnormal ? 'bg-[#BF4E3B] animate-ping' : 'bg-[#2D6643]'}`} />
             <span>Telemetry: {isAbnormal ? 'ACUTE ANOMALY DETECTED' : isNoisy ? 'SIGNAL IMPEDANCE HIGH' : 'SINUS RHYTHM'}</span>
           </div>
 
-          <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-[#e6dfd5] text-[10px] font-mono text-[#78716c]">
+          <div className="absolute bottom-3.5 right-3.5 bg-white/85 backdrop-blur-md px-3 py-1 rounded-full border border-white/90 text-[10px] font-mono text-[#756A5C] shadow-xs">
             Calibrated Hardware Rate: 500 S/s
           </div>
         </div>
 
         {/* Live Vitals Gauge Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5 pt-2">
           {/* Heart Rate */}
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
+          <div className="bubbly-card p-4 space-y-1">
+            <div className="flex items-center justify-between text-[#756A5C] text-xs font-medium">
               <span>Heart Rate</span>
-              <Heart className={`w-4 h-4 ${isAbnormal ? 'text-[#9e2a2b] animate-bounce' : 'text-[#8c6d46]'}`} />
+              <Heart className={`w-4 h-4 ${isAbnormal ? 'text-[#BF4E3B] animate-bounce' : 'text-[#9C7854]'}`} />
             </div>
-            <div className="mt-1 flex items-baseline gap-1">
-              <span className={`text-2xl font-bold font-mono ${isAbnormal ? 'text-[#9e2a2b]' : 'text-[#2c2623]'}`}>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className={`text-2xl md:text-3xl font-bold font-serif ${isAbnormal ? 'text-[#BF4E3B]' : 'text-[#2A241E]'}`}>
                 {heartRate}
               </span>
-              <span className="text-xs text-[#78716c]">BPM</span>
+              <span className="text-xs text-[#756A5C]">BPM</span>
             </div>
           </div>
 
           {/* SpO2 */}
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
+          <div className="bubbly-card p-4 space-y-1">
+            <div className="flex items-center justify-between text-[#756A5C] text-xs font-medium">
               <span>Oxygen (SpO2)</span>
-              <Wind className="w-4 h-4 text-[#8c6d46]" />
+              <Wind className="w-4 h-4 text-[#9C7854]" />
             </div>
-            <div className="mt-1 flex items-baseline gap-1">
-              <span className={`text-2xl font-bold font-mono ${spo2 < 90 ? 'text-[#9e2a2b]' : 'text-[#2c2623]'}`}>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className={`text-2xl md:text-3xl font-bold font-serif ${spo2 < 90 ? 'text-[#BF4E3B]' : 'text-[#2D6643]'}`}>
                 {spo2}%
               </span>
             </div>
           </div>
 
           {/* Blood Pressure */}
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
+          <div className="bubbly-card p-4 space-y-1">
+            <div className="flex items-center justify-between text-[#756A5C] text-xs font-medium">
               <span>NIBP (Sys/Dia)</span>
-              <Activity className="w-4 h-4 text-[#8c6d46]" />
+              <Activity className="w-4 h-4 text-[#9C7854]" />
             </div>
-            <div className="mt-1 flex items-baseline gap-1">
-              <span className="text-2xl font-bold font-mono text-[#2c2623]">
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="text-2xl md:text-3xl font-bold font-serif text-[#2A241E]">
                 {systolicBP}/{diastolicBP}
               </span>
-              <span className="text-xs text-[#78716c]">mmHg</span>
+              <span className="text-xs text-[#756A5C]">mmHg</span>
             </div>
           </div>
 
           {/* Core Temperature */}
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
+          <div className="bubbly-card p-4 space-y-1">
+            <div className="flex items-center justify-between text-[#756A5C] text-xs font-medium">
               <span>Body Temp</span>
-              <Thermometer className="w-4 h-4 text-[#8c6d46]" />
+              <Thermometer className="w-4 h-4 text-[#9C7854]" />
             </div>
-            <div className="mt-1 flex items-baseline gap-1">
-              <span className="text-2xl font-bold font-mono text-[#2c2623]">
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="text-2xl md:text-3xl font-bold font-serif text-[#2A241E]">
                 {temperature}
               </span>
-              <span className="text-xs text-[#78716c]">°C</span>
+              <span className="text-xs text-[#756A5C]">°C</span>
             </div>
           </div>
 
           {/* Signal Quality */}
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
+          <div className="bubbly-card p-4 space-y-1">
+            <div className="flex items-center justify-between text-[#756A5C] text-xs font-medium">
               <span>Signal Quality</span>
-              <Wifi className="w-4 h-4 text-[#8c6d46]" />
+              <Wifi className="w-4 h-4 text-[#9C7854]" />
             </div>
-            <div className="mt-1 flex items-baseline gap-1">
-              <span className={`text-2xl font-bold font-mono ${signalQuality < 65 ? 'text-[#b58550]' : 'text-[#2d6e42]'}`}>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className={`text-2xl md:text-3xl font-bold font-serif ${signalQuality < 65 ? 'text-[#B87B32]' : 'text-[#2D6643]'}`}>
                 {signalQuality}%
               </span>
             </div>
@@ -485,16 +489,18 @@ export const MonitoringPage: React.FC = () => {
         </div>
 
         {/* Cryptographic Telemetry Ingestion Ledger Link */}
-        <div className="p-3.5 rounded-xl bg-[#f5efeb] border border-[#e6dfd5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#2d6e42] shrink-0" />
-            <div className="font-mono text-[#2c2623]">
-              <span className="text-[#78716c] font-sans">Latest Ingested SHA-256 Digest: </span>
-              <strong>{recentPacketHash.slice(0, 24)}...</strong>
+        <div className="p-4 rounded-2xl bg-white/70 border border-white/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs backdrop-blur-md">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-[#EBF3ED] text-[#2D6643] flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div className="font-mono text-[#2A241E]">
+              <span className="text-[#756A5C] font-sans">Latest Ingested SHA-256 Digest: </span>
+              <strong className="text-[#2A241E] bg-[#FAF7F2] px-2 py-0.5 rounded-md border border-[rgba(160,140,115,0.15)]">{recentPacketHash.slice(0, 24)}...</strong>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-[#2d6e42]">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-[#2D6643] px-3 py-1 rounded-full bg-[#EBF3ED] border border-[#C8E1D2]">
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Cryptographic Chain Link Active</span>
           </div>

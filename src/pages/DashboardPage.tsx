@@ -64,7 +64,7 @@ export const DashboardPage: React.FC = () => {
   const [consentResearch, setConsentResearch] = useState(false);
 
   useEffect(() => {
-    // Resilient independent fetches so one slow/failing call doesn't block the rest
+    // Resilient independent fetches
     dataService.getPatients().then(setPatients).catch(err => console.warn('Patients fetch:', err));
     dataService.getSensors().then(setSensors).catch(err => console.warn('Sensors fetch:', err));
     dataService.getStats().then(setStats).catch(err => console.warn('Stats fetch:', err));
@@ -186,6 +186,7 @@ export const DashboardPage: React.FC = () => {
 
   // Role Meta Definition
   interface RoleMeta {
+    greeting: string;
     title: string;
     subtitle: string;
     badge: string;
@@ -199,14 +200,15 @@ export const DashboardPage: React.FC = () => {
 
   const roleConfig: Record<string, RoleMeta> = {
     Doctor: {
-      title: 'Physician Perspective • Dr. Sarah Jenkins (Cardiology)',
+      greeting: 'Welcome back, Dr. Sarah Jenkins',
+      title: 'Attending Cardiologist',
       subtitle:
         'Clinical scope: Inpatient telemetry review, 12-lead ECG diagnostics, prescription auditing, and trauma break-glass privileges.',
       badge: 'Attending Physician',
-      badgeClass: 'bg-[#f0fdf4] text-[#166534] border-[#bbf7d0]',
+      badgeClass: 'bg-[#EBF3ED] text-[#306B49] border-[#C8E1D2]',
       icon: Stethoscope,
-      accentColor: 'text-[#2d6e42]',
-      bgAccent: 'bg-[#f2f7f3]',
+      accentColor: 'text-[#306B49]',
+      bgAccent: 'bg-[#EBF3ED]',
       actions: [
         { label: 'Live ECG Workstation', icon: Activity, onClick: () => navigate('/monitoring'), primary: true },
         { label: 'Patient Registry', icon: Users, onClick: () => navigate('/patients') },
@@ -220,14 +222,15 @@ export const DashboardPage: React.FC = () => {
       ],
     },
     Admin: {
-      title: 'System Operations Perspective • IT & Infrastructure Root',
+      greeting: 'Welcome back, IT Security Admin',
+      title: 'Gateway Root Operator',
       subtitle:
         'Full administrative scope: Hardware IoT nodes, PUF challenge tokens, database integrity monitoring, and consortium rollup.',
       badge: 'Root Administrator',
-      badgeClass: 'bg-[#f5efeb] text-[#8c6d46] border-[#d8cfc2]',
+      badgeClass: 'bg-[#FAF5EE] text-[#8C6642] border-[#E8DACB]',
       icon: ShieldAlert,
-      accentColor: 'text-[#8c6d46]',
-      bgAccent: 'bg-[#f5efeb]',
+      accentColor: 'text-[#8C6642]',
+      bgAccent: 'bg-[#FAF5EE]',
       actions: [
         { label: 'Provision Sensors', icon: Cpu, onClick: () => navigate('/sensors'), primary: true },
         { label: 'Consortium Blockchain', icon: Boxes, onClick: () => navigate('/blockchain') },
@@ -242,89 +245,91 @@ export const DashboardPage: React.FC = () => {
       ],
     },
     Auditor: {
-      title: 'Consortium Auditor Perspective • Zero-Trust Compliance',
+      greeting: 'Welcome back, Security Auditor',
+      title: 'Consortium Forensic Inspector',
       subtitle:
         'Independent forensic scope: Read-only cryptographic verification, SHA-256 byte check, tamper detection, and audit trail export.',
       badge: 'Security Auditor',
-      badgeClass: 'bg-[#fefce8] text-[#854d0e] border-[#fef08a]',
+      badgeClass: 'bg-[#FAF5EE] text-[#9A6424] border-[#F2DAC0]',
       icon: FileCheck2,
-      accentColor: 'text-[#854d0e]',
-      bgAccent: 'bg-[#fefce8]',
+      accentColor: 'text-[#9A6424]',
+      bgAccent: 'bg-[#FAF5EE]',
       actions: [
-        { label: 'Inspect Provenance Ledger', icon: ShieldCheck, onClick: () => navigate('/provenance'), primary: true },
-        { label: 'Verify Merkle Proofs', icon: Boxes, onClick: () => navigate('/blockchain') },
-        { label: 'Forensic Audit Logs', icon: ScrollText, onClick: () => navigate('/audit-logs') },
+        { label: 'Verify Provenance', icon: ShieldCheck, onClick: () => navigate('/provenance'), primary: true },
+        { label: 'Audit Trail Export', icon: ScrollText, onClick: () => navigate('/audit-logs') },
+        { label: 'Inspect Merkle Root', icon: Boxes, onClick: () => navigate('/blockchain') },
       ],
       metrics: [
-        { label: 'Anchored Provenance', value: `${stats?.provenanceCount || 8} Records`, sub: 'SHA-256 hashed on ingest', icon: ShieldCheck },
-        { label: 'Storage Divergences', value: isTampered ? '1 Compromised' : '0 Compromised', sub: isTampered ? 'Hash mismatch active' : '100% Bit-level match', icon: AlertTriangle, alert: isTampered },
-        { label: 'Consortium Blocks', value: `#${stats?.consortiumBlockHeight || 189422}`, sub: 'Layer-2 Merkle Rollup', icon: Boxes },
-        { label: 'Forensic Audit Trail', value: '12 Events', sub: 'Cryptographic ledger active', icon: ScrollText },
+        { label: 'Provenance Records', value: stats ? stats.provenanceCount : provenanceRecords.length, sub: 'Cryptographically chained', icon: ShieldCheck },
+        { label: 'Tamper Incidents', value: isTampered ? '1 DETECTED' : '0 Clean', sub: isTampered ? 'Divergent SHA-256 Digest' : '100% Hash Consistency', icon: AlertTriangle, alert: isTampered },
+        { label: 'Consortium Blocks', value: stats?.blockCount || 3, sub: 'PoA Consensus Finalized', icon: Boxes },
+        { label: 'Pending Authorizations', value: stats?.pendingAccessRequests || 2, sub: 'Requires Review', icon: KeyRound },
       ],
     },
     Patient: {
-      title: 'Patient Portal Perspective • Eleanor Vance (Bed 04)',
+      greeting: 'Welcome back, Eleanor Vance',
+      title: 'Patient Portal (Bed 04)',
       subtitle:
-        'Personal health portal: Real-time telemetry monitoring, bound biometric sensors, informed consent permissions, and tamper protection.',
-      badge: 'Patient Portal',
-      badgeClass: 'bg-[#eff6ff] text-[#1e40af] border-[#bfdbfe]',
+        'Patient view: Encrypted personal vitals, active bedside telemetry feeds, and informed consent authorization controls.',
+      badge: 'Protected Inpatient',
+      badgeClass: 'bg-[#EFF5FA] text-[#2C6288] border-[#CCE0EE]',
       icon: Heart,
-      accentColor: 'text-[#1e40af]',
-      bgAccent: 'bg-[#eff6ff]',
+      accentColor: 'text-[#2C6288]',
+      bgAccent: 'bg-[#EFF5FA]',
       actions: [
-        { label: 'View My Live Telemetry', icon: Activity, onClick: () => navigate('/monitoring'), primary: true },
-        { label: 'My Consent & Permissions', icon: KeyRound, onClick: () => navigate('/access-control') },
-        { label: 'My Medical Provenance', icon: ShieldCheck, onClick: () => navigate('/provenance') },
+        { label: 'View My Live ECG', icon: Activity, onClick: () => navigate('/monitoring'), primary: true },
+        { label: 'My Privacy Consents', icon: KeyRound, onClick: () => navigate('/access-control') },
+        { label: 'My Verified Records', icon: ShieldCheck, onClick: () => navigate('/provenance') },
       ],
       metrics: [
-        { label: 'Hospital Location', value: 'Cardio ICU', sub: 'Bed 04 • Post-CABG Recovery', icon: Users },
-        { label: 'Bound Medical Sensors', value: '2 Sensors', sub: 'Lead II ECG + SpO2 Oximeter', icon: Cpu },
-        { label: 'Health Trust Score', value: `${patientProfile?.latestTrustScore || 96.4}%`, sub: 'Optimal Telemetry Verified', icon: ShieldCheck },
-        { label: 'Consented Physicians', value: '2 Approved', sub: 'Cardiology & Trauma Surgery', icon: UserCheck },
+        { label: 'Monitoring Status', value: 'Active', sub: 'ICU Telemetry Synced', icon: Activity },
+        { label: 'Assigned Sensors', value: '2 Devices', sub: '12-Lead ECG + SpO2', icon: Cpu },
+        { label: 'Clinical Condition', value: 'Post-CABG', sub: 'Cardio Step-down Bed 04', icon: Heart },
+        { label: 'Data Trust Rating', value: '96.4%', sub: 'Hardware PUF Verified', icon: ShieldCheck },
       ],
     },
   };
 
-  const currentRoleConfig: RoleMeta = roleConfig[activeRole] || roleConfig.Doctor;
-  const RoleIcon = currentRoleConfig.icon;
+  const currentRoleConfig = roleConfig[activeRole] || roleConfig.Doctor;
+  const RoleHeaderIcon = currentRoleConfig.icon;
 
   return (
     <div className="space-y-6">
-      {/* 1. Dynamic Role Perspective Header Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className={`w-11 h-11 rounded-2xl ${currentRoleConfig.bgAccent} border border-[#d8cfc2] flex items-center justify-center shrink-0 shadow-2xs`}>
-              <RoleIcon className={`w-5 h-5 ${currentRoleConfig.accentColor}`} />
+      {/* 1. Glassy Role-Adaptive Executive Header */}
+      <div className="bubbly-glass rounded-[28px] p-6 md:p-8 relative overflow-hidden">
+        {/* Soft Ambient Light Glows inside Panel */}
+        <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-gradient-to-br from-[#EAD7C0]/40 via-[#E4CDAE]/20 to-transparent blur-2xl pointer-events-none" />
+        <div className="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-gradient-to-tr from-[#DFC3A3]/30 via-transparent to-transparent blur-2xl pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#8C6642] text-white flex items-center justify-center shadow-[0_4px_16px_rgba(140,102,66,0.22)] shrink-0 mt-0.5">
+              <RoleHeaderIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-base sm:text-lg font-bold text-[#2c2623] tracking-tight">
-                  {currentRoleConfig.title}
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl md:text-3xl font-bold text-[#30291F] tracking-tight font-serif whitespace-normal">
+                  {currentRoleConfig.greeting}
                 </h1>
-                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${currentRoleConfig.badgeClass}`}>
+                <span className={`text-[11px] font-semibold px-3 py-1 rounded-full border shadow-2xs ${currentRoleConfig.badgeClass}`}>
                   {currentRoleConfig.badge}
                 </span>
               </div>
-              <p className="text-xs text-[#78716c] mt-1 leading-relaxed">
+              <p className="text-xs text-[#82776A] mt-1.5 leading-relaxed max-w-3xl">
                 {currentRoleConfig.subtitle}
               </p>
             </div>
           </div>
 
           {/* Role-Specific Quick Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             {currentRoleConfig.actions.map(act => {
               const ActionIcon = act.icon;
               return (
                 <button
                   key={act.label}
                   onClick={act.onClick}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-                    act.primary
-                      ? 'bg-[#8c6d46] hover:bg-[#745733] text-white shadow-xs'
-                      : 'bg-white hover:bg-[#faf7f2] text-[#2c2623] border border-[#d8cfc2] shadow-2xs'
-                  }`}
+                  className={act.primary ? 'pill-btn-primary' : 'pill-btn-secondary'}
                 >
                   <ActionIcon className="w-3.5 h-3.5" />
                   <span>{act.label}</span>
@@ -340,19 +345,30 @@ export const DashboardPage: React.FC = () => {
         {currentRoleConfig.metrics.map(metric => {
           const MetricIcon = metric.icon;
           return (
-            <div key={metric.label} className="p-4 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs">
-              <div className="flex items-center justify-between text-[#78716c] text-xs font-medium">
-                <span>{metric.label}</span>
-                <MetricIcon className={`w-4 h-4 ${metric.alert ? 'text-[#9e2a2b]' : 'text-[#8c6d46]'}`} />
+            <div
+              key={metric.label}
+              className="bubbly-card rounded-[24px] p-5 space-y-2 relative overflow-hidden transition-all duration-200"
+            >
+              <div className="flex items-center justify-between text-[#82776A] text-xs font-medium">
+                <span className="uppercase tracking-wider text-[11px] font-semibold">{metric.label}</span>
+                <div
+                  className={`w-9 h-9 rounded-2xl flex items-center justify-center ${
+                    metric.alert
+                      ? 'bg-[#B85C4A]/10 text-[#B85C4A] border border-[#B85C4A]/20'
+                      : 'bg-[#8C6642]/10 text-[#8C6642] border border-[#8C6642]/15'
+                  }`}
+                >
+                  <MetricIcon className="w-4 h-4" />
+                </div>
               </div>
               <div
-                className={`mt-2 text-2xl font-bold font-mono ${
-                  metric.alert ? 'text-[#9e2a2b]' : metric.highlight ? 'text-[#b58550]' : 'text-[#2c2623]'
+                className={`text-2xl md:text-3xl font-bold font-serif ${
+                  metric.alert ? 'text-[#B85C4A]' : metric.highlight ? 'text-[#8C6642]' : 'text-[#30291F]'
                 }`}
               >
                 {metric.value}
               </div>
-              <div className="text-[11px] text-[#78716c] mt-0.5 truncate">{metric.sub}</div>
+              <div className="text-[11px] text-[#82776A] truncate">{metric.sub}</div>
             </div>
           );
         })}
@@ -362,20 +378,20 @@ export const DashboardPage: React.FC = () => {
       {activeRole === 'Patient' ? (
         <div className="space-y-6">
           {/* Personal Health & Live Telemetry Card */}
-          <div className="p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#e6dfd5]">
+          <div className="bubbly-glass p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[rgba(160,140,115,0.12)]">
               <div>
-                <h2 className="text-sm font-bold text-[#2c2623] flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-[#8c6d46]" />
+                <h2 className="text-base font-bold text-[#2A241E] flex items-center gap-2 font-serif">
+                  <Activity className="w-4 h-4 text-[#9C7854]" />
                   My Personal Telemetry & Vitals Stream
                 </h2>
-                <p className="text-xs text-[#78716c] mt-0.5">
+                <p className="text-xs text-[#756A5C] mt-0.5">
                   Live encrypted telemetry stream ingested from your ICU bed monitors.
                 </p>
               </div>
               <button
                 onClick={() => navigate('/monitoring')}
-                className="px-3.5 py-1.5 rounded-xl bg-[#8c6d46] hover:bg-[#745733] text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
+                className="pill-btn-primary"
               >
                 <Activity className="w-3.5 h-3.5" />
                 <span>Open Live 500Hz ECG Oscilloscope</span>
@@ -383,26 +399,30 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {/* Vitals Grid for Eleanor */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-                <span className="text-[#78716c] text-[11px] block">Heart Rate</span>
-                <div className="text-xl font-bold font-mono text-[#2c2623] mt-1">72 bpm</div>
-                <span className="text-[10px] text-[#2d6e42] font-semibold">Normal Sinus Rhythm</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-xs">
+              <div className="bubbly-card-tinted p-4 space-y-1">
+                <span className="text-[#756A5C] text-[11px] block font-medium">Heart Rate</span>
+                <div className="text-2xl font-bold font-serif text-[#2A241E]">72 bpm</div>
+                <span className="text-[10px] text-[#2D6643] font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7754]" /> Normal Sinus Rhythm
+                </span>
               </div>
-              <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-                <span className="text-[#78716c] text-[11px] block">Pulse Oximetry (SpO2)</span>
-                <div className="text-xl font-bold font-mono text-[#2d6e42] mt-1">98%</div>
-                <span className="text-[10px] text-[#2d6e42] font-semibold">Optimal Oxygenation</span>
+              <div className="bubbly-card-tinted p-4 space-y-1">
+                <span className="text-[#756A5C] text-[11px] block font-medium">Pulse Oximetry (SpO2)</span>
+                <div className="text-2xl font-bold font-serif text-[#2D6643]">98%</div>
+                <span className="text-[10px] text-[#2D6643] font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7754]" /> Optimal Oxygenation
+                </span>
               </div>
-              <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-                <span className="text-[#78716c] text-[11px] block">Blood Pressure (NIBP)</span>
-                <div className="text-xl font-bold font-mono text-[#2c2623] mt-1">120/80</div>
-                <span className="text-[10px] text-[#78716c]">Normotensive mmHg</span>
+              <div className="bubbly-card-tinted p-4 space-y-1">
+                <span className="text-[#756A5C] text-[11px] block font-medium">Blood Pressure (NIBP)</span>
+                <div className="text-2xl font-bold font-serif text-[#2A241E]">120/80</div>
+                <span className="text-[10px] text-[#756A5C]">Normotensive mmHg</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5]">
-                <span className="text-[#78716c] text-[11px] block">Gateway Trust Score</span>
-                <div className="text-xl font-bold font-mono text-[#8c6d46] mt-1">96.4%</div>
-                <span className="text-[10px] text-[#2d6e42] font-semibold">High Confidence</span>
+              <div className="bubbly-card-tinted p-4 space-y-1">
+                <span className="text-[#756A5C] text-[11px] block font-medium">Gateway Trust Score</span>
+                <div className="text-2xl font-bold font-serif text-[#9C7854]">96.4%</div>
+                <span className="text-[10px] text-[#2D6643] font-semibold">High Confidence</span>
               </div>
             </div>
           </div>
@@ -410,36 +430,36 @@ export const DashboardPage: React.FC = () => {
           {/* Split Row: Bound Sensors & Inpatient Informed Consent Controls */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left (6 Cols): My Bound Biometric Sensors */}
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-3">
+            <div className="lg:col-span-6 bubbly-card p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-[#2c2623] flex items-center gap-1.5">
-                    <Cpu className="w-4 h-4 text-[#8c6d46]" />
+                  <h3 className="text-sm font-bold text-[#2A241E] flex items-center gap-1.5 font-serif text-base">
+                    <Cpu className="w-4 h-4 text-[#9C7854]" />
                     My Bound Biometric Sensors
                   </h3>
-                  <p className="text-xs text-[#78716c]">Hardware telemetry nodes attached to your profile</p>
+                  <p className="text-xs text-[#756A5C]">Hardware telemetry nodes attached to your profile</p>
                 </div>
-                <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded-lg bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]">
+                <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-[#EBF3ED] text-[#2D6643] border border-[#C8E1D2]">
                   2 Connected
                 </span>
               </div>
 
-              <div className="space-y-2 pt-1">
+              <div className="space-y-2.5 pt-1">
                 {patientSensors.map(sensor => (
-                  <div key={sensor.id} className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] text-xs space-y-1.5">
+                  <div key={sensor.id} className="p-3.5 rounded-2xl bg-white/70 border border-white/80 shadow-2xs text-xs space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[#2c2623]">{sensor.id}</span>
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]">
+                      <span className="font-mono font-bold text-[#2A241E]">{sensor.id}</span>
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#EBF3ED] text-[#2D6643] border border-[#C8E1D2]">
                         {sensor.authStatus}
                       </span>
                     </div>
-                    <div className="text-[#78716c] text-xs font-medium">{sensor.type}</div>
-                    <div className="flex items-center justify-between text-[11px] text-[#78716c] pt-1">
+                    <div className="text-[#756A5C] text-xs font-medium">{sensor.type}</div>
+                    <div className="flex items-center justify-between text-[11px] text-[#756A5C] pt-1">
                       <span className="flex items-center gap-1">
-                        <Wifi className="w-3 h-3 text-[#8c6d46]" /> Signal: {sensor.signalQuality}%
+                        <Wifi className="w-3.5 h-3.5 text-[#9C7854]" /> Signal: {sensor.signalQuality}%
                       </span>
                       <span className="flex items-center gap-1">
-                        <Battery className="w-3 h-3 text-[#2d6e42]" /> Battery: {sensor.batteryLevel}%
+                        <Battery className="w-3.5 h-3.5 text-[#2D6643]" /> Battery: {sensor.batteryLevel}%
                       </span>
                     </div>
                   </div>
@@ -448,60 +468,60 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {/* Right (6 Cols): Interactive Informed Consent Management */}
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-3">
+            <div className="lg:col-span-6 bubbly-card p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-[#2c2623] flex items-center gap-1.5">
-                    <KeyRound className="w-4 h-4 text-[#8c6d46]" />
+                  <h3 className="text-sm font-bold text-[#2A241E] flex items-center gap-1.5 font-serif text-base">
+                    <KeyRound className="w-4 h-4 text-[#9C7854]" />
                     Inpatient Informed Consent Management
                   </h3>
-                  <p className="text-xs text-[#78716c]">Control which physicians are authorized to access your data</p>
+                  <p className="text-xs text-[#756A5C]">Control which physicians are authorized to access your data</p>
                 </div>
               </div>
 
-              <div className="space-y-2 pt-1">
-                {/* Doctor 1: Dr. Sarah Jenkins */}
-                <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] flex items-center justify-between gap-3 text-xs">
+              <div className="space-y-2.5 pt-1">
+                {/* Doctor 1 */}
+                <div className="p-3.5 rounded-2xl bg-white/70 border border-white/80 shadow-2xs flex items-center justify-between gap-3 text-xs">
                   <div>
-                    <div className="font-bold text-[#2c2623]">Dr. Sarah Jenkins</div>
-                    <div className="text-[11px] text-[#78716c]">Chief of Cardiology (Attending)</div>
+                    <div className="font-bold text-[#2A241E]">Dr. Sarah Jenkins</div>
+                    <div className="text-[11px] text-[#756A5C]">Chief of Cardiology (Attending)</div>
                   </div>
                   <button
                     onClick={() => toggleConsent('Dr. Sarah Jenkins', consentDoctorJenkins, setConsentDoctorJenkins)}
-                    className="flex items-center gap-1 text-xs font-semibold cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                   >
                     {consentDoctorJenkins ? (
-                      <span className="flex items-center gap-1 text-[#2d6e42]">
-                        <ToggleRight className="w-6 h-6 text-[#2d6e42]" />
+                      <span className="flex items-center gap-1.5 text-[#2D6643] px-3 py-1 rounded-full bg-[#EBF3ED] border border-[#C8E1D2]">
+                        <ToggleRight className="w-4 h-4 text-[#2D6643]" />
                         <span>Granted</span>
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-[#9e2a2b]">
-                        <ToggleLeft className="w-6 h-6 text-[#78716c]" />
+                      <span className="flex items-center gap-1.5 text-[#BF4E3B] px-3 py-1 rounded-full bg-[#FDF0EE] border border-[#F5CAC3]">
+                        <ToggleLeft className="w-4 h-4 text-[#BF4E3B]" />
                         <span>Revoked</span>
                       </span>
                     )}
                   </button>
                 </div>
 
-                {/* Doctor 2: Dr. Robert House */}
-                <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] flex items-center justify-between gap-3 text-xs">
+                {/* Doctor 2 */}
+                <div className="p-3.5 rounded-2xl bg-white/70 border border-white/80 shadow-2xs flex items-center justify-between gap-3 text-xs">
                   <div>
-                    <div className="font-bold text-[#2c2623]">Dr. Robert House</div>
-                    <div className="text-[11px] text-[#78716c]">Trauma Resuscitation & Surgery</div>
+                    <div className="font-bold text-[#2A241E]">Dr. Robert House</div>
+                    <div className="text-[11px] text-[#756A5C]">Trauma Resuscitation & Surgery</div>
                   </div>
                   <button
                     onClick={() => toggleConsent('Dr. Robert House', consentDoctorHouse, setConsentDoctorHouse)}
-                    className="flex items-center gap-1 text-xs font-semibold cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                   >
                     {consentDoctorHouse ? (
-                      <span className="flex items-center gap-1 text-[#2d6e42]">
-                        <ToggleRight className="w-6 h-6 text-[#2d6e42]" />
+                      <span className="flex items-center gap-1.5 text-[#2D6643] px-3 py-1 rounded-full bg-[#EBF3ED] border border-[#C8E1D2]">
+                        <ToggleRight className="w-4 h-4 text-[#2D6643]" />
                         <span>Granted</span>
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-[#9e2a2b]">
-                        <ToggleLeft className="w-6 h-6 text-[#78716c]" />
+                      <span className="flex items-center gap-1.5 text-[#BF4E3B] px-3 py-1 rounded-full bg-[#FDF0EE] border border-[#F5CAC3]">
+                        <ToggleLeft className="w-4 h-4 text-[#BF4E3B]" />
                         <span>Revoked</span>
                       </span>
                     )}
@@ -509,23 +529,23 @@ export const DashboardPage: React.FC = () => {
                 </div>
 
                 {/* Research Opt-In */}
-                <div className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] flex items-center justify-between gap-3 text-xs">
+                <div className="p-3.5 rounded-2xl bg-white/70 border border-white/80 shadow-2xs flex items-center justify-between gap-3 text-xs">
                   <div>
-                    <div className="font-bold text-[#2c2623]">Academic Cardiac Research</div>
-                    <div className="text-[11px] text-[#78716c]">Anonymized consortium research pool</div>
+                    <div className="font-bold text-[#2A241E]">Academic Cardiac Research</div>
+                    <div className="text-[11px] text-[#756A5C]">Anonymized consortium research pool</div>
                   </div>
                   <button
                     onClick={() => toggleConsent('Clinical Research', consentResearch, setConsentResearch)}
-                    className="flex items-center gap-1 text-xs font-semibold cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                   >
                     {consentResearch ? (
-                      <span className="flex items-center gap-1 text-[#2d6e42]">
-                        <ToggleRight className="w-6 h-6 text-[#2d6e42]" />
+                      <span className="flex items-center gap-1.5 text-[#306B49] px-3 py-1 rounded-full bg-[#EBF3ED] border border-[#C8E1D2]">
+                        <ToggleRight className="w-4 h-4 text-[#306B49]" />
                         <span>Opted In</span>
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-[#78716c]">
-                        <ToggleLeft className="w-6 h-6 text-[#78716c]" />
+                      <span className="flex items-center gap-1.5 text-[#82776A] px-3 py-1 rounded-full bg-[#30291F]/5 border border-transparent">
+                        <ToggleLeft className="w-4 h-4 text-[#82776A]" />
                         <span>Opted Out</span>
                       </span>
                     )}
@@ -537,40 +557,43 @@ export const DashboardPage: React.FC = () => {
         </div>
       ) : null}
 
-      {/* 4. Cryptographic Record Integrity Auditor (Available across Admin, Doctor & Auditor perspectives) */}
-      <div className="p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-4">
+      {/* 4. Cryptographic Record Integrity Auditor */}
+      <div className="bubbly-glass rounded-[28px] p-6 md:p-8 space-y-6 relative overflow-hidden">
+        {/* Subtle Ambient Refraction Spot */}
+        <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-gradient-to-br from-[#EAD7C0]/35 via-[#E4CDAE]/20 to-transparent blur-3xl pointer-events-none" />
+
         {/* Console Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#e6dfd5]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(112,91,66,0.12)] relative z-10">
           <div>
-            <h2 className="text-sm font-bold text-[#2c2623] flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#8c6d46]" />
+            <h2 className="text-base md:text-lg font-bold text-[#30291F] flex items-center gap-2 font-serif">
+              <Lock className="w-4 h-4 text-[#8C6642]" />
               {activeRole === 'Auditor'
                 ? 'Forensic Record Integrity & SHA-256 Audit Console'
                 : activeRole === 'Patient'
                 ? 'My Cryptographic Health Record Protection'
                 : 'Cryptographic Record Integrity Auditor'}
             </h2>
-            <p className="text-xs text-[#78716c] mt-0.5">
+            <p className="text-xs text-[#82776A] mt-1 max-w-2xl leading-relaxed">
               {activeRole === 'Patient'
                 ? 'Your clinical prescriptions are hashed with SHA-256 and anchored to the hospital blockchain to prevent unauthorized alteration.'
                 : 'Live byte-level SHA-256 hash comparison between the database storage row and the anchored consortium Merkle root.'}
             </p>
           </div>
 
-          {/* Scenario simulation controls (Enabled for Admin, Doctor, Auditor) */}
+          {/* Scenario simulation controls */}
           {activeRole !== 'Patient' && (
             <div className="flex flex-wrap items-center gap-2">
               {!isTampered ? (
                 <>
                   <button
                     onClick={handleSimulateOverdose}
-                    className="px-3 py-1.5 rounded-xl bg-[#fdf3f3] hover:bg-[#fae4e5] text-[#9e2a2b] text-xs font-bold border border-[#f5cacc] cursor-pointer transition-colors shadow-2xs"
+                    className="pill-btn-danger"
                   >
                     Simulate Overdose (500mg)
                   </button>
                   <button
                     onClick={handleSimulateDrugChange}
-                    className="px-3 py-1.5 rounded-xl bg-[#fdf8f0] hover:bg-[#fbf1e2] text-[#b58550] text-xs font-bold border border-[#f2dfbe] cursor-pointer transition-colors shadow-2xs"
+                    className="pill-btn-secondary"
                   >
                     Simulate Drug Alteration
                   </button>
@@ -578,7 +601,7 @@ export const DashboardPage: React.FC = () => {
               ) : (
                 <button
                   onClick={handleRestoreRecord}
-                  className="px-3.5 py-1.5 rounded-xl bg-[#f2f7f3] hover:bg-[#e2ede4] text-[#2d6e42] border border-[#c6dcce] text-xs font-bold cursor-pointer transition-colors shadow-xs flex items-center gap-1.5"
+                  className="pill-btn-primary"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Restore Authentic Database Record</span>
@@ -588,36 +611,43 @@ export const DashboardPage: React.FC = () => {
           )}
         </div>
 
-        {/* Target Database Row Metadata */}
-        <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] text-xs space-y-2">
-          <div className="flex flex-wrap items-center justify-between text-[#78716c] font-medium gap-2">
-            <span className="flex items-center gap-1.5 text-[#2c2623]">
-              <FileText className="w-3.5 h-3.5 text-[#8c6d46]" />
-              Database Record: <strong className="font-mono text-[#2c2623]">{targetRecord?.id || 'PRV-90410'}</strong>
+        {/* Target Database Row Metadata Workspace */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 text-xs space-y-3.5 shadow-2xs backdrop-blur-md relative z-10">
+          <div className="flex flex-wrap items-center justify-between text-[#82776A] font-medium gap-2">
+            <span className="flex items-center gap-1.5 text-[#30291F]">
+              <FileText className="w-3.5 h-3.5 text-[#8C6642]" />
+              Database Record:{' '}
+              <strong className="font-mono text-[#30291F] bg-[#FAF5EE] px-2.5 py-0.5 rounded-lg border border-[#E8DACB]">
+                {targetRecord?.id || 'PRV-90410'}
+              </strong>
             </span>
             <span>
-              Patient: <strong>{targetRecord?.patientName || 'Eleanor Vance'} ({targetRecord?.patientId || 'PT-1042'})</strong> • Bed 04
+              Patient:{' '}
+              <strong className="text-[#30291F]">
+                {targetRecord?.patientName || 'Eleanor Vance'} ({targetRecord?.patientId || 'PT-1042'})
+              </strong>{' '}
+              • Bed 04
             </span>
             <span>
-              Attending: <strong>Dr. Sarah Jenkins</strong>
+              Attending: <strong className="text-[#30291F]">Dr. Sarah Jenkins</strong>
             </span>
           </div>
 
           <div>
-            <label className="text-[11px] font-semibold text-[#78716c] block mb-1">
+            <label className="text-[11px] font-semibold text-[#82776A] block mb-1.5">
               {activeRole === 'Patient'
                 ? 'Your Official Verified Clinical Prescription:'
-                : 'Live Prescription Payload (Editable for testing):'}
+                : 'Live Prescription Payload (Editable for real-time SHA-256 recalculation):'}
             </label>
             <input
               type="text"
               value={dosageText}
               onChange={e => setDosageText(e.target.value)}
               disabled={activeRole === 'Patient'}
-              className={`w-full px-3 py-2 rounded-xl border font-mono text-xs transition-colors focus:outline-hidden ${
+              className={`w-full px-4 py-2.5 rounded-full border font-mono text-xs transition-all focus:outline-hidden ${
                 isTampered
-                  ? 'bg-[#fdf3f3] border-[#f5cacc] text-[#9e2a2b] font-bold'
-                  : 'bg-white border-[#d8cfc2] text-[#2c2623]'
+                  ? 'bg-[#B85C4A]/10 border-[#B85C4A]/30 text-[#8B3424] font-bold shadow-xs'
+                  : 'bg-white/80 border-[rgba(112,91,66,0.22)] text-[#30291F] focus:border-[#8C6642] focus:bg-white shadow-xs'
               }`}
             />
           </div>
@@ -625,23 +655,25 @@ export const DashboardPage: React.FC = () => {
 
         {/* Live Integrity Verdict Banner */}
         <div
-          className={`p-4 rounded-xl border text-xs flex items-center justify-between gap-3 ${
-            isTampered ? 'bg-[#fdf3f3] border-[#f5cacc] text-[#9e2a2b]' : 'bg-[#f2f7f3] border-[#c6dcce] text-[#2d6e42]'
+          className={`p-4 rounded-2xl border text-xs flex items-center justify-between gap-4 transition-all relative z-10 ${
+            isTampered
+              ? 'bg-[#B85C4A]/12 border-[#B85C4A]/30 text-[#8B3424] shadow-[0_4px_16px_rgba(184,92,74,0.12)]'
+              : 'bg-[#47765B]/10 border-[#47765B]/25 text-[#2C523C] shadow-[0_4px_16px_rgba(71,118,91,0.08)]'
           }`}
         >
           <div className="flex items-center gap-3">
             {isTampered ? (
-              <AlertTriangle className="w-5 h-5 text-[#9e2a2b] shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-[#B85C4A] shrink-0" />
             ) : (
-              <CheckCircle2 className="w-5 h-5 text-[#2d6e42] shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-[#47765B] shrink-0" />
             )}
             <div>
-              <div className="font-bold">
+              <div className="font-bold text-sm">
                 {isTampered
                   ? 'CRITICAL INTEGRITY FAILURE: Database row has been tampered with!'
                   : 'Cryptographic Integrity Confirmed: Database record matches blockchain root'}
               </div>
-              <div className="text-[11px] text-[#78716c] mt-0.5">
+              <div className="text-[11px] opacity-90 mt-0.5">
                 {isTampered
                   ? 'The live computed SHA-256 digest deviates from the immutable Merkle root anchored on the consortium blockchain.'
                   : 'Byte-for-byte SHA-256 equality validated. The stored clinical prescription has not been modified.'}
@@ -649,10 +681,10 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <span
-            className={`font-mono font-bold text-[11px] px-2.5 py-1 rounded-lg border shrink-0 ${
+            className={`font-mono font-bold text-[11px] px-3 py-1 rounded-full border shrink-0 ${
               isTampered
-                ? 'bg-[#fdf3f3] text-[#9e2a2b] border-[#f5cacc]'
-                : 'bg-[#f2f7f3] text-[#2d6e42] border-[#c6dcce]'
+                ? 'bg-[#B85C4A]/15 text-[#B85C4A] border-[#B85C4A]/30'
+                : 'bg-[#47765B]/15 text-[#47765B] border-[#47765B]/30'
             }`}
           >
             {isTampered ? 'TAMPERED' : 'VERIFIED'}
@@ -660,45 +692,49 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Side-by-Side Cryptographic Hash Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] space-y-1">
-            <div className="flex items-center justify-between text-[#78716c] text-[11px] font-sans font-medium">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs font-mono relative z-10">
+          <div className="p-4 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 space-y-1.5 shadow-2xs backdrop-blur-md">
+            <div className="flex items-center justify-between text-[#82776A] text-[11px] font-sans font-medium">
               <span>Anchored Blockchain Hash (Block #{stats?.consortiumBlockHeight || 189422}):</span>
               <button
                 onClick={() => handleCopyHash(storedHash)}
-                className="text-[#8c6d46] hover:text-[#745733] flex items-center gap-1 cursor-pointer"
+                className="text-[#8C6642] hover:text-[#72583F] flex items-center gap-1 cursor-pointer font-semibold"
               >
-                {isCopied ? <Check className="w-3 h-3 text-[#2d6e42]" /> : <Copy className="w-3 h-3 text-[#8c6d46]" />}
+                {isCopied ? <Check className="w-3.5 h-3.5 text-[#47765B]" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{isCopied ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="text-[#2c2623] truncate font-semibold select-all font-mono">
+            <div className="text-[#30291F] truncate font-semibold select-all font-mono text-[11px] bg-[#FAF5EE]/75 p-2.5 rounded-xl border border-[rgba(112,91,66,0.12)]">
               {storedHash || defaultHash}
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] space-y-1">
-            <div className="text-[#78716c] text-[11px] font-sans font-medium">
+          <div className="p-4 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 space-y-1.5 shadow-2xs backdrop-blur-md">
+            <div className="text-[#82776A] text-[11px] font-sans font-medium">
               Live Computed SHA-256 Digest (Current Row):
             </div>
-            <div className={`truncate font-bold select-all font-mono ${isTampered ? 'text-[#9e2a2b]' : 'text-[#2d6e42]'}`}>
+            <div
+              className={`truncate font-bold select-all font-mono text-[11px] bg-[#FAF5EE]/75 p-2.5 rounded-xl border border-[rgba(112,91,66,0.12)] ${
+                isTampered ? 'text-[#B85C4A]' : 'text-[#47765B]'
+              }`}
+            >
               {activeHash || defaultHash}
             </div>
           </div>
         </div>
       </div>
 
-      {/* 5. Split Workstation View: Patient Registry & Hardware Security (Rendered for Doctor, Admin, Auditor) */}
+      {/* 5. Split Workstation View: Patient Registry & Hardware Security */}
       {activeRole !== 'Patient' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left (7 Cols): Patient Database Table */}
-          <div className="lg:col-span-7 p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-3">
+          <div className="lg:col-span-7 bubbly-glass rounded-[28px] p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-[#2c2623]">
+                <h3 className="text-base font-bold text-[#30291F] font-serif">
                   {activeRole === 'Doctor' ? 'My Assigned Inpatient Telemetry Feeds' : 'Inpatient Health Database'}
                 </h3>
-                <p className="text-xs text-[#78716c]">
+                <p className="text-xs text-[#82776A]">
                   {activeRole === 'Doctor'
                     ? 'ICU patients currently monitored under your clinical supervision'
                     : 'Live electronic patient records tracked by the gateway'}
@@ -706,7 +742,7 @@ export const DashboardPage: React.FC = () => {
               </div>
               <button
                 onClick={() => navigate('/patients')}
-                className="text-xs text-[#8c6d46] hover:text-[#745733] font-semibold cursor-pointer flex items-center gap-1"
+                className="text-xs text-[#8C6642] hover:text-[#72583F] font-semibold cursor-pointer flex items-center gap-1"
               >
                 <span>View All</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -716,33 +752,33 @@ export const DashboardPage: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#e6dfd5] text-[#78716c] text-[11px] uppercase tracking-wider font-semibold">
-                    <th className="pb-2.5">ID</th>
-                    <th className="pb-2.5">Patient Name</th>
-                    <th className="pb-2.5">Ward</th>
-                    <th className="pb-2.5">Clinical Condition</th>
-                    <th className="pb-2.5">Trust Score</th>
-                    <th className="pb-2.5 text-right">Action</th>
+                  <tr className="border-b border-[rgba(112,91,66,0.12)] text-[#82776A] text-[11px] uppercase tracking-wider font-semibold">
+                    <th className="pb-3">ID</th>
+                    <th className="pb-3">Patient Name</th>
+                    <th className="pb-3">Ward</th>
+                    <th className="pb-3">Clinical Condition</th>
+                    <th className="pb-3">Trust Score</th>
+                    <th className="pb-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#f5efeb]">
+                <tbody className="divide-y divide-[rgba(112,91,66,0.08)]">
                   {patients.slice(0, 5).map(pt => (
-                    <tr key={pt.id} className="hover:bg-[#faf7f2] transition-colors">
-                      <td className="py-2.5 font-mono font-bold text-[#8c6d46]">{pt.id}</td>
-                      <td className="py-2.5 text-[#2c2623] font-medium">{pt.name}</td>
-                      <td className="py-2.5 text-[#78716c]">{pt.ward}</td>
-                      <td className="py-2.5 text-[#2c2623] truncate max-w-44">{pt.condition}</td>
-                      <td className="py-2.5 font-mono font-semibold text-[#2d6e42]">{pt.latestTrustScore}%</td>
-                      <td className="py-2.5 text-right">
+                    <tr key={pt.id} className="hover:bg-white/50 transition-colors">
+                      <td className="py-3 font-mono font-bold text-[#8C6642]">{pt.id}</td>
+                      <td className="py-3 text-[#30291F] font-medium">{pt.name}</td>
+                      <td className="py-3 text-[#82776A]">{pt.ward}</td>
+                      <td className="py-3 text-[#30291F] truncate max-w-44">{pt.condition}</td>
+                      <td className="py-3 font-mono font-semibold text-[#306B49]">{pt.latestTrustScore}%</td>
+                      <td className="py-3 text-right">
                         {activeRole === 'Doctor' ? (
                           <button
                             onClick={() => navigate('/monitoring')}
-                            className="px-2 py-1 rounded-md text-[10px] font-semibold bg-[#f5efeb] hover:bg-[#e6dfd5] text-[#8c6d46] border border-[#d8cfc2] transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[#FAF5EE] hover:bg-[#E8DACB] text-[#8C6642] border border-[#E8DACB] transition-all cursor-pointer"
                           >
                             ECG Stream
                           </button>
                         ) : (
-                          <span className="px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-[#f2f7f3] text-[#2d6e42] border border-[#c6dcce]">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#EBF3ED] text-[#306B49] border border-[#C8E1D2]">
                             VERIFIED
                           </span>
                         )}
@@ -755,36 +791,36 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Right (5 Cols): Hardware IoT Nodes & PUF Security */}
-          <div className="lg:col-span-5 p-5 rounded-2xl bg-white border border-[#e6dfd5] shadow-xs space-y-3">
+          <div className="lg:col-span-5 bubbly-glass rounded-[28px] p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-[#2c2623]">
+                <h3 className="text-base font-bold text-[#30291F] font-serif">
                   {activeRole === 'Auditor' ? 'Hardware PUF Identity Ledger' : 'IoT Hardware Nodes (PUF)'}
                 </h3>
-                <p className="text-xs text-[#78716c]">Hardware challenge authentication status</p>
+                <p className="text-xs text-[#82776A]">Hardware challenge authentication status</p>
               </div>
               <button
                 onClick={() => navigate('/sensors')}
-                className="text-xs text-[#8c6d46] hover:text-[#745733] font-semibold cursor-pointer flex items-center gap-1"
+                className="text-xs text-[#8C6642] hover:text-[#72583F] font-semibold cursor-pointer flex items-center gap-1"
               >
                 <span>Manage</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {sensors.slice(0, 3).map(sensor => (
-                <div key={sensor.id} className="p-3 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] text-xs space-y-1">
+                <div key={sensor.id} className="p-3.5 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 text-xs space-y-1.5 shadow-2xs backdrop-blur-md">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-[#2c2623]">{sensor.id}</span>
-                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-[#f5efeb] text-[#8c6d46] border border-[#d8cfc2]">
+                    <span className="font-mono font-bold text-[#30291F]">{sensor.id}</span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#FAF5EE] text-[#8C6642] border border-[#E8DACB]">
                       {sensor.authStatus}
                     </span>
                   </div>
-                  <div className="text-[#78716c] text-[11px] font-medium">{sensor.type}</div>
-                  <div className="flex items-center justify-between pt-1 text-[11px] text-[#78716c] font-mono">
+                  <div className="text-[#82776A] text-[11px] font-medium">{sensor.type}</div>
+                  <div className="flex items-center justify-between pt-1 text-[11px] text-[#82776A] font-mono">
                     <span>Trust: {sensor.deviceTrust}/100</span>
-                    <span className="truncate max-w-36 text-[10px] text-[#78716c]">{sensor.hardwareFingerprint}</span>
+                    <span className="truncate max-w-36 text-[10px] text-[#8C8275]">{sensor.hardwareFingerprint}</span>
                   </div>
                 </div>
               ))}

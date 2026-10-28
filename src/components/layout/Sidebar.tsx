@@ -14,7 +14,6 @@ import {
   RotateCcw,
   Shield,
   Database,
-  User,
   Lock,
   Stethoscope,
   FileCheck2,
@@ -32,25 +31,25 @@ export const Sidebar: React.FC = () => {
     Doctor: {
       name: 'Dr. Sarah Jenkins',
       title: 'Attending Cardiologist',
-      badgeClass: 'bg-[#f0fdf4] text-[#166534] border-[#bbf7d0]',
+      badgeClass: 'bg-[#EBF3ED] text-[#306B49] border-[#C8E1D2]',
       icon: Stethoscope,
     },
     Admin: {
       name: 'IT Security Admin',
       title: 'Gateway Root Operator',
-      badgeClass: 'bg-[#f5efeb] text-[#8c6d46] border-[#d8cfc2]',
+      badgeClass: 'bg-[#FAF5EE] text-[#8C6642] border-[#E8DACB]',
       icon: Shield,
     },
     Auditor: {
       name: 'Security Auditor',
       title: 'Consortium Forensic Inspector',
-      badgeClass: 'bg-[#fefce8] text-[#854d0e] border-[#fef08a]',
+      badgeClass: 'bg-[#FAF5EE] text-[#9A6424] border-[#F2DAC0]',
       icon: FileCheck2,
     },
     Patient: {
       name: 'Eleanor Vance',
       title: 'Patient Portal (Bed 04)',
-      badgeClass: 'bg-[#eff6ff] text-[#1e40af] border-[#bfdbfe]',
+      badgeClass: 'bg-[#EFF5FA] text-[#2C6288] border-[#CCE0EE]',
       icon: Heart,
     },
   };
@@ -184,51 +183,53 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-[#e6dfd5] flex flex-col shrink-0 h-screen sticky top-0 shadow-2xs select-none">
+    <aside className="w-[270px] shrink-0 h-full flex flex-col bubbly-glass rounded-[28px] p-5 select-none relative z-20 overflow-hidden">
       {/* Brand Header */}
-      <div className="p-4 border-b border-[#e6dfd5] flex items-center gap-3 bg-[#faf7f2]">
-        <div className="w-9 h-9 rounded-xl bg-[#8c6d46] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+      <div className="pb-4 mb-3 border-b border-[rgba(112,91,66,0.12)] flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-[#8C6642] text-white flex items-center justify-center shadow-xs shrink-0">
           <Shield className="w-5 h-5 text-white" />
         </div>
-        <div>
-          <div className="font-bold text-sm text-[#2c2623] tracking-tight flex items-center gap-1.5">
-            <span>MEDGUARD</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-medium bg-[#f5efeb] text-[#8c6d46] border border-[#d8cfc2]">
+        <div className="min-w-0 flex-1">
+          <div className="font-bold text-sm text-[#30291F] tracking-tight flex items-center gap-1.5 font-serif">
+            <span className="text-base tracking-wide font-serif">MEDGUARD</span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold bg-[#FAF5EE] text-[#8C6642] border border-[#E8DACB]">
               v2.4
             </span>
           </div>
-          <div className="text-[11px] text-[#78716c] font-medium">Medical Data Trust Gateway</div>
+          <div className="text-[11px] text-[#82776A] font-medium leading-tight mt-0.5">
+            Data Trust Gateway
+          </div>
         </div>
       </div>
 
-      {/* Active User Identity & Role Badge Card */}
-      <div className="p-3 border-b border-[#e6dfd5] bg-white">
-        <div className="p-2.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-white border border-[#d8cfc2] flex items-center justify-center text-[#8c6d46] shrink-0 shadow-2xs">
+      {/* Physician Profile Card */}
+      <div className="mb-3.5">
+        <div className="p-3 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 shadow-2xs flex items-center gap-2.5 backdrop-blur-md">
+          <div className="w-8 h-8 rounded-xl bg-white border border-[#E8DACB] flex items-center justify-center text-[#8C6642] shrink-0 shadow-2xs">
             <ProfileIcon className="w-4 h-4" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-[#2c2623] truncate leading-tight">
+            <div className="text-xs font-bold text-[#30291F] truncate leading-tight">
               {currentProfile.name}
             </div>
-            <div className="text-[10px] text-[#78716c] truncate leading-tight mt-0.5">
+            <div className="text-[10px] text-[#82776A] truncate leading-tight mt-0.5">
               {currentProfile.title}
             </div>
           </div>
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border shrink-0 ${currentProfile.badgeClass}`}>
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 ${currentProfile.badgeClass}`}>
             {activeRole}
           </span>
         </div>
       </div>
 
-      {/* Categorized Navigation */}
-      <nav className="flex-1 p-3 space-y-5 overflow-y-auto">
+      {/* Categorized Navigation Hierarchy */}
+      <nav className="flex-1 py-1 space-y-4 overflow-y-auto pr-0.5">
         {navSections.map(section => (
           <div key={section.title} className="space-y-1">
-            <div className="px-3 text-[10px] font-bold tracking-wider uppercase text-[#78716c] font-mono">
+            <div className="px-3 text-[10px] font-bold tracking-wider uppercase text-[#8C8275] font-sans">
               {section.title}
             </div>
-            <div className="space-y-0.5 pt-1">
+            <div className="space-y-1 pt-1">
               {section.items.map(item => {
                 const Icon = item.icon;
                 return (
@@ -236,15 +237,15 @@ export const Sidebar: React.FC = () => {
                     key={item.path}
                     to={item.path}
                     className={({ isActive }) =>
-                      `flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors ${
+                      `flex items-center gap-3 px-3.5 h-[42px] rounded-[14px] text-[13px] transition-all ${
                         isActive
-                          ? 'bg-[#f5efeb] text-[#8c6d46] font-semibold border border-[#d8cfc2] shadow-2xs'
-                          : 'text-[#78716c] hover:text-[#2c2623] hover:bg-[#faf7f2] font-medium'
+                          ? 'bg-[#8C6642] text-white font-medium shadow-[0_3px_10px_rgba(140,102,66,0.22)]'
+                          : 'text-[#6E6355] hover:text-[#30291F] hover:bg-white/60 font-medium'
                       }`
                     }
                   >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.name}</span>
+                    <Icon className="w-[18px] h-[18px] shrink-0" />
+                    <span className="truncate">{item.name}</span>
                   </NavLink>
                 );
               })}
@@ -253,32 +254,34 @@ export const Sidebar: React.FC = () => {
         ))}
       </nav>
 
-      {/* Footer Database Status & Reset */}
-      <div className="p-3 border-t border-[#e6dfd5] bg-[#faf7f2] space-y-2">
-        <div className="p-2.5 rounded-xl bg-white border border-[#e6dfd5] text-[11px] space-y-1 text-[#78716c]">
+      {/* Clean Consolidated Footer: Storage & Sync Status */}
+      <div className="pt-3 mt-1 border-t border-[rgba(112,91,66,0.12)] space-y-2.5">
+        <div className="p-3 rounded-2xl bg-[#FFFCF7]/65 border border-white/80 text-[11px] space-y-1.5 text-[#82776A] backdrop-blur-md">
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1 font-medium text-[#2c2623]">
-              <Database className="w-3 h-3 text-[#8c6d46]" /> Storage Engine
+            <span className="flex items-center gap-1.5 font-medium text-[#30291F]">
+              <Database className="w-3.5 h-3.5 text-[#8C6642]" /> Storage Engine
             </span>
-            <span className="font-mono text-[#2d6e42] font-bold">SQLite Persistence</span>
+            <span className="font-mono text-[#306B49] font-bold text-[10px] px-2 py-0.5 rounded-full bg-[#EBF3ED] border border-[#C8E1D2]">
+              SQLite ACID
+            </span>
           </div>
-          <div className="flex items-center justify-between text-[#78716c]">
+          <div className="flex items-center justify-between text-[#82776A] pt-0.5">
             <span>Consortium Rollup</span>
-            <span className="font-mono text-[#2c2623] font-semibold">5 Nodes Synced</span>
+            <span className="font-mono text-[#30291F] font-semibold text-[10px]">5 Nodes Synced</span>
           </div>
         </div>
 
         {activeRole === 'Admin' ? (
           <button
             onClick={handleResetData}
-            className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-[#f5efeb] text-[#78716c] hover:text-[#2c2623] text-xs font-medium border border-[#d8cfc2] transition-colors cursor-pointer shadow-2xs"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-full bg-white/75 hover:bg-white text-[#82776A] hover:text-[#30291F] text-xs font-semibold border border-[rgba(112,91,66,0.18)] transition-all cursor-pointer shadow-2xs hover:shadow-xs"
           >
-            <RotateCcw className="w-3 h-3 text-[#78716c]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#8C6642]" />
             <span>Reset Demo Database</span>
           </button>
         ) : (
-          <div className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#f5efeb]/60 text-[#a89f91] text-[11px] font-medium border border-[#e6dfd5] cursor-not-allowed">
-            <Lock className="w-3 h-3 text-[#a89f91]" />
+          <div className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full bg-[#30291F]/5 text-[#9E9486] text-[11px] font-medium border border-transparent cursor-not-allowed">
+            <Lock className="w-3 h-3 text-[#9E9486]" />
             <span>Reset DB (Admin Only)</span>
           </div>
         )}

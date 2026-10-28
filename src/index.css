@@ -1,107 +1,253 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm Beige & Earthy Clinical Palette */
-  --color-sand-50: #fdfbf7;
-  --color-sand-100: #faf7f2; /* Warm ivory page background */
-  --color-sand-200: #f5efeb; /* Soft cream surface / panel */
-  --color-sand-300: #efe8df; /* Light beige accent surface */
-  --color-sand-400: #e6dfd5; /* Subtle sand border */
-  --color-sand-500: #d8cfc2; /* Medium taupe border */
-  --color-sand-600: #b5a998; /* Muted stone */
-  --color-sand-700: #8c7f6e; /* Warm slate taupe */
-  --color-sand-800: #5c5245; /* Dark taupe */
-  --color-sand-900: #3d352b; /* Deep warm charcoal */
-  --color-sand-950: #2c2623; /* Deepest espresso text */
+  /* Typography */
+  --font-serif: "Newsreader", "Fraunces", Georgia, Cambria, serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Primary Accent: Muted Tan & Warm Brown */
-  --color-tan-50: #faf6f0;
-  --color-tan-100: #f4ecdf;
-  --color-tan-200: #ebd8be;
-  --color-tan-300: #dcbe98;
-  --color-tan-400: #c89f70;
-  --color-tan-500: #b58550;
-  --color-tan-600: #8c6d46; /* Primary brand tan */
-  --color-tan-700: #745733; /* Deep warm brown hover */
-  --color-tan-800: #5a4225;
-  --color-tan-900: #423018;
+  /* Lighter, Fresh Ivory & Warm Glass Palette */
+  --color-page: #F5F0E7;
+  --color-surface-secondary: #EFE5D6;
+  --color-surface-card: #FFFCF7;
+  --color-surface-translucent: rgba(255, 252, 247, 0.72);
+  --color-text-primary: #30291F;
+  --color-text-secondary: #82776A;
+  --color-border-subtle: rgba(112, 91, 66, 0.12);
+  --color-border-medium: rgba(112, 91, 66, 0.22);
+  --color-accent: #8C6642;
+  --color-accent-hover: #72583F;
+  --color-success: #47765B;
+  --color-warning: #B78343;
+  --color-error: #B85C4A;
 
-  /* Verified / Integrity: Muted Sage Green */
-  --color-sage-50: #f2f7f3;
-  --color-sage-100: #e2ede4;
-  --color-sage-200: #c6dcce;
-  --color-sage-500: #3d8a55;
-  --color-sage-600: #2d6e42;
-  --color-sage-700: #225633;
+  /* Radii */
+  --radius-panel: 28px;
+  --radius-panel-sm: 22px;
+  --radius-panel-lg: 32px;
+  --radius-pill: 9999px;
+}
 
-  /* Tamper / Alert / Emergency: Deep Burgundy Crimson */
-  --color-burgundy-50: #fdf3f3;
-  --color-burgundy-100: #fae4e5;
-  --color-burgundy-200: #f5cacc;
-  --color-burgundy-500: #c2333b;
-  --color-burgundy-600: #9e2a2b;
-  --color-burgundy-700: #7e1f20;
+@layer components {
+  /* Ultra-Premium Glass Panel (28px radius, frosted blur, soft ambient shadow, specular highlight) */
+  .bubbly-glass,
+  .glass-panel {
+    background: rgba(255, 252, 247, 0.62);
+    backdrop-filter: blur(20px) saturate(125%);
+    -webkit-backdrop-filter: blur(20px) saturate(125%);
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    border-radius: 28px;
+    box-shadow: 
+      0 8px 32px 0 rgba(91, 68, 43, 0.055),
+      0 2px 6px -1px rgba(91, 68, 43, 0.03),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+  }
 
-  /* Neutral Dark / Charcoal Text */
-  --color-charcoal-50: #fafaf9;
-  --color-charcoal-100: #f5f5f4;
-  --color-charcoal-200: #e7e5e4;
-  --color-charcoal-300: #d6d3d1;
-  --color-charcoal-400: #a8a29e;
-  --color-charcoal-500: #78716c; /* Secondary text */
-  --color-charcoal-600: #57534e;
-  --color-charcoal-700: #44403c;
-  --color-charcoal-800: #292524;
-  --color-charcoal-900: #1c1917;
+  /* Secondary Glass Card (22px radius) */
+  .bubbly-card,
+  .glass-card {
+    background: rgba(255, 252, 247, 0.72);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    border-radius: 22px;
+    box-shadow: 
+      0 6px 24px -2px rgba(91, 68, 43, 0.045),
+      0 2px 6px -1px rgba(91, 68, 43, 0.025),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bubbly-card:hover,
+  .glass-card:hover {
+    background: rgba(255, 252, 247, 0.82);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 32px -4px rgba(91, 68, 43, 0.08),
+      0 4px 10px 0 rgba(91, 68, 43, 0.035),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  }
+
+  /* Subtly Tinted Translucent Card */
+  .bubbly-card-tinted {
+    background: rgba(255, 252, 247, 0.52);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 20px;
+    box-shadow: 
+      0 2px 8px rgba(91, 68, 43, 0.03),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  /* Primary Pill Button */
+  .pill-btn-primary,
+  .pill-button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.55rem 1.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: #8C6642;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 4px 14px 0 rgba(140, 102, 66, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+  .pill-btn-primary:hover,
+  .pill-button-primary:hover {
+    background: #72583F;
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 18px 0 rgba(114, 88, 63, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+  .pill-btn-primary:active,
+  .pill-button-primary:active {
+    transform: translateY(0);
+    scale: 0.98;
+  }
+
+  /* Secondary Glass Pill Button */
+  .pill-btn,
+  .pill-btn-secondary,
+  .pill-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: rgba(255, 252, 247, 0.75);
+    color: #30291F;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 
+      0 2px 8px rgba(91, 68, 43, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+  .pill-btn-secondary:hover,
+  .pill-button-secondary:hover {
+    background: rgba(255, 252, 247, 0.95);
+    border-color: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 
+      0 4px 14px rgba(91, 68, 43, 0.08),
+      inset 0 1px 0 #ffffff;
+  }
+  .pill-btn-secondary:active,
+  .pill-button-secondary:active {
+    transform: translateY(0);
+    scale: 0.98;
+  }
+
+  /* Danger / Tamper Pill Button */
+  .pill-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: #B85C4A;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 14px rgba(184, 92, 74, 0.25);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+  .pill-btn-danger:hover {
+    background: #A34A38;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(184, 92, 74, 0.35);
+  }
+
+  /* Status Pill Badge */
+  .bubbly-pill,
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+    border-width: 1px;
+    box-shadow: 0 1px 4px rgba(91, 68, 43, 0.04);
+  }
 }
 
 @layer base {
   :root {
-    --bg-page: #faf7f2;
-    --bg-surface: #ffffff;
-    --bg-subtle: #f5efeb;
-    --border-subtle: #e6dfd5;
-    --border-strong: #d8cfc2;
-    --text-primary: #2c2623;
-    --text-secondary: #78716c;
-    --accent-tan: #8c6d46;
-    --accent-tan-hover: #745733;
-    --accent-sage: #2d6e42;
-    --accent-burgundy: #9e2a2b;
+    --bg-page: #F5F0E7;
+    --bg-surface: #FFFCF7;
+    --bg-subtle: #EFE5D6;
+    --border-subtle: rgba(112, 91, 66, 0.12);
+    --border-strong: rgba(112, 91, 66, 0.22);
+    --text-primary: #30291F;
+    --text-secondary: #82776A;
+    --accent-tan: #8C6642;
+    --accent-tan-hover: #72583F;
+    --accent-sage: #47765B;
+    --accent-burgundy: #B85C4A;
+    --accent-warning: #B78343;
   }
 
   * {
-    border-color: #e6dfd5;
+    border-color: rgba(112, 91, 66, 0.12);
   }
 
   body {
     margin: 0;
     padding: 0;
-    background-color: #faf7f2;
-    color: #2c2623;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #F5F0E7;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(235, 215, 192, 0.7) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(230, 210, 185, 0.6) 0px, transparent 40%),
+      radial-gradient(at 50% 100%, rgba(240, 225, 205, 0.75) 0px, transparent 60%);
+    background-attachment: fixed;
+    color: #30291F;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
-  code, pre, .font-mono {
-    font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  h1, h2, h3, .font-serif {
+    font-family: 'Newsreader', 'Fraunces', Georgia, Cambria, serif;
+    letter-spacing: -0.015em;
   }
 
-  /* Custom Warm Scrollbars */
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  /* Custom Light Warm Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #f5efeb;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #d8cfc2;
+    background: rgba(112, 91, 66, 0.22);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #b5a998;
+    background: rgba(140, 102, 66, 0.42);
   }
 }

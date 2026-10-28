@@ -46,27 +46,28 @@ export const Modal: React.FC<ModalProps> = ({
       : 'max-w-5xl';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2c2623]/40 backdrop-blur-xs animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#30291F]/45 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className={`relative w-full ${maxWidthClass} max-h-[90vh] flex flex-col rounded-2xl border border-[#e6dfd5] bg-white shadow-2xl overflow-hidden`}
+        className={`relative w-full ${maxWidthClass} max-h-[90vh] flex flex-col rounded-[28px] border border-white/85 bg-[#FFFCF7]/90 backdrop-blur-2xl shadow-[0_24px_70px_rgba(91,68,43,0.14)] overflow-hidden`}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-[#e6dfd5] bg-[#faf7f2]">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(112,91,66,0.12)] bg-[#FAF5EE]/70 backdrop-blur-md">
           <div>
-            <h3 className="text-base font-bold text-[#2c2623]">{title}</h3>
-            {subtitle && <p className="text-xs text-[#78716c] mt-0.5">{subtitle}</p>}
+            <h3 className="font-serif text-xl font-bold tracking-tight text-[#30291F]">{title}</h3>
+            {subtitle && <p className="text-xs text-[#82776A] mt-1 font-sans">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#78716c] hover:text-[#2c2623] hover:bg-[#f5efeb] transition-colors cursor-pointer"
+            className="p-2 rounded-full text-[#82776A] hover:text-[#30291F] hover:bg-white/80 border border-transparent hover:border-[rgba(112,91,66,0.18)] transition-all cursor-pointer shadow-2xs"
+            title="Close dialog"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
           {children}
         </div>
       </div>

@@ -43,108 +43,108 @@ export const MerkleTreeVisualizer: React.FC = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-[#e6dfd5] bg-white p-5 shadow-xs">
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#e6dfd5]">
+    <div className="bubbly-glass p-6 md:p-7 space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[rgba(160,140,115,0.12)]">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-[#8c6d46]" />
-            <h3 className="text-base font-bold text-[#2c2623]">Cryptographic Merkle Tree Batch Rollup</h3>
+            <Layers className="w-5 h-5 text-[#9C7854]" />
+            <h3 className="text-base font-bold text-[#2A241E] font-serif">Cryptographic Merkle Tree Batch Rollup</h3>
           </div>
-          <p className="text-xs text-[#78716c] mt-0.5">
-            Hierarchical SHA-256 tree condensing individual medical records into a single verified root anchored on chain
+          <p className="text-xs text-[#756A5C] mt-1">
+            Hierarchical SHA-256 tree condensing individual medical records into a single verified root anchored on chain.
           </p>
         </div>
-        <div className="flex items-center gap-1.5 font-medium text-xs bg-[#f2f7f3] border border-[#c6dcce] text-[#2d6e42] px-3 py-1.5 rounded-xl">
+        <div className="flex items-center gap-1.5 font-semibold text-xs bg-[#EBF3ED] border border-[#C8E1D2] text-[#2D6643] px-3.5 py-1.5 rounded-full shadow-2xs">
           <ShieldCheck className="w-4 h-4" />
           <span>Consortium Verified (5 Nodes)</span>
         </div>
       </div>
 
       {/* Visual Tree Layout */}
-      <div className="mt-6 flex flex-col items-center">
+      <div className="mt-4 flex flex-col items-center">
         {/* Layer 2: Merkle Root */}
         <div className="flex flex-col items-center">
-          <div className="text-[10px] font-mono tracking-wider uppercase text-[#8c6d46] font-bold mb-1">
+          <div className="text-[10px] font-mono tracking-wider uppercase text-[#9C7854] font-bold mb-1.5">
             Layer 2 • Blockchain Anchored Merkle Root
           </div>
           <button
             onClick={() => setSelectedHash(root)}
-            className={`group relative flex items-center gap-2 px-4 py-2 rounded-xl border font-mono text-xs transition-all cursor-pointer ${
+            className={`group relative flex items-center gap-2 px-5 py-2.5 rounded-full border font-mono text-xs transition-all cursor-pointer ${
               selectedHash === root
-                ? 'bg-[#f5efeb] border-[#8c6d46] text-[#2c2623] shadow-xs scale-105'
-                : 'bg-white border-[#d8cfc2] text-[#78716c] hover:border-[#8c6d46]'
+                ? 'bg-gradient-to-r from-[#9C7854] to-[#85613D] text-white border-transparent shadow-[0_4px_14px_rgba(140,105,68,0.3)] scale-105'
+                : 'bg-white/80 border-[rgba(160,140,115,0.25)] text-[#756A5C] hover:border-[#9C7854]'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-[#8c6d46]" />
+            <span className={`w-2 h-2 rounded-full ${selectedHash === root ? 'bg-white' : 'bg-[#9C7854]'}`} />
             <span className="font-bold">H_ROOT:</span>
             <span className="truncate max-w-[180px] sm:max-w-[280px]">{root}</span>
           </button>
-          <div className="w-px h-6 bg-[#d8cfc2]" />
+          <div className="w-px h-6 bg-[rgba(160,140,115,0.25)]" />
         </div>
 
         {/* Layer 1: Intermediate Branches */}
         <div className="w-full max-w-xl">
           <div className="relative flex justify-around">
-            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-[#d8cfc2]" />
+            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-[rgba(160,140,115,0.25)]" />
 
             {/* Left Branch */}
             <div className="flex flex-col items-center pt-3">
-              <div className="text-[9px] font-mono text-[#78716c] mb-1">H_12 Branch</div>
+              <div className="text-[9px] font-mono text-[#756A5C] mb-1">H_12 Branch</div>
               <button
                 onClick={() => setSelectedHash(h12)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-[11px] transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border font-mono text-[11px] transition-all cursor-pointer ${
                   selectedHash === h12
-                    ? 'bg-[#f5efeb] border-[#8c6d46] text-[#2c2623]'
-                    : 'bg-white border-[#e6dfd5] text-[#78716c] hover:border-[#8c6d46]'
+                    ? 'bg-[#F8F2EA] border-[#9C7854] text-[#8C6642] shadow-xs'
+                    : 'bg-white/70 border-white/80 text-[#756A5C] hover:border-[#9C7854]'
                 }`}
               >
                 <span className="truncate max-w-[120px] sm:max-w-[160px]">{h12}</span>
               </button>
-              <div className="w-px h-6 bg-[#d8cfc2]" />
+              <div className="w-px h-6 bg-[rgba(160,140,115,0.25)]" />
             </div>
 
             {/* Right Branch */}
             <div className="flex flex-col items-center pt-3">
-              <div className="text-[9px] font-mono text-[#78716c] mb-1">H_34 Branch</div>
+              <div className="text-[9px] font-mono text-[#756A5C] mb-1">H_34 Branch</div>
               <button
                 onClick={() => setSelectedHash(h34)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-[11px] transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border font-mono text-[11px] transition-all cursor-pointer ${
                   selectedHash === h34
-                    ? 'bg-[#f5efeb] border-[#8c6d46] text-[#2c2623]'
-                    : 'bg-white border-[#e6dfd5] text-[#78716c] hover:border-[#8c6d46]'
+                    ? 'bg-[#F8F2EA] border-[#9C7854] text-[#8C6642] shadow-xs'
+                    : 'bg-white/70 border-white/80 text-[#756A5C] hover:border-[#9C7854]'
                 }`}
               >
                 <span className="truncate max-w-[120px] sm:max-w-[160px]">{h34}</span>
               </button>
-              <div className="w-px h-6 bg-[#d8cfc2]" />
+              <div className="w-px h-6 bg-[rgba(160,140,115,0.25)]" />
             </div>
           </div>
         </div>
 
         {/* Layer 0: Leaf Hashes */}
-        <div className="w-full mt-1">
-          <div className="text-[10px] font-mono tracking-wider uppercase text-[#78716c] font-semibold text-center mb-2">
+        <div className="w-full mt-2">
+          <div className="text-[10px] font-mono tracking-wider uppercase text-[#9E9486] font-semibold text-center mb-2.5">
             Layer 0 • Verified Medical Telemetry Leaves
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             {leaves.slice(0, 4).map((leaf, idx) => (
               <div
                 key={leaf.id || idx}
                 onClick={() => setSelectedHash(leaf.hash)}
-                className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
+                className={`p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
                   selectedHash === leaf.hash
-                    ? 'bg-[#f5efeb] border-[#8c6d46] shadow-xs'
-                    : 'bg-[#faf7f2] border-[#e6dfd5] hover:border-[#8c6d46]'
+                    ? 'bg-[#F8F2EA] border-[#9C7854] shadow-xs'
+                    : 'bg-white/70 border-white/80 hover:border-[#9C7854]'
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] font-mono text-[#78716c] mb-1">
-                  <span className="font-bold text-[#8c6d46]">H_{idx + 1}</span>
-                  <span>{leaf.id}</span>
+                <div className="flex items-center justify-between text-[10px] font-mono text-[#756A5C] mb-1">
+                  <span className="font-bold text-[#9C7854]">H_{idx + 1}</span>
+                  <span className="text-[10px]">{leaf.id}</span>
                 </div>
-                <div className="font-semibold text-[#2c2623] truncate text-[11px]">
+                <div className="font-semibold text-[#2A241E] truncate text-[11px]">
                   {leaf.label}
                 </div>
-                <div className="mt-1 font-mono text-[10px] text-[#78716c] truncate">
+                <div className="mt-1 font-mono text-[10px] text-[#756A5C] truncate">
                   {leaf.hash}
                 </div>
               </div>
@@ -155,20 +155,18 @@ export const MerkleTreeVisualizer: React.FC = () => {
 
       {/* Selected Hash Inspector */}
       {selectedHash && (
-        <div className="mt-5 p-3.5 rounded-xl bg-[#faf7f2] border border-[#e6dfd5] text-xs">
-          <div className="flex items-center justify-between text-[#78716c] text-[11px] mb-1">
-            <span className="font-medium">Selected Node Digest:</span>
-            <button
-              onClick={() => handleCopy(selectedHash)}
-              className="text-[#8c6d46] hover:text-[#745733] flex items-center gap-1 cursor-pointer font-sans"
-            >
-              {copied ? <Check className="w-3 h-3 text-[#2d6e42]" /> : <Copy className="w-3 h-3" />}
-              <span>{copied ? 'Copied' : 'Copy Full Hash'}</span>
-            </button>
+        <div className="p-4 rounded-2xl bg-white/70 border border-white/80 shadow-2xs flex items-center justify-between gap-3 text-xs font-mono backdrop-blur-md">
+          <div className="min-w-0 flex-1">
+            <span className="text-[#756A5C] text-[11px] block font-sans font-medium">Selected Node SHA-256 Digest:</span>
+            <div className="text-[#2A241E] truncate font-bold text-xs mt-0.5">{selectedHash}</div>
           </div>
-          <div className="font-mono text-[#2c2623] break-all select-all font-semibold">
-            {selectedHash}
-          </div>
+          <button
+            onClick={() => handleCopy(selectedHash)}
+            className="pill-btn-secondary py-1.5 px-3 text-xs font-sans shrink-0"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-[#2D6643]" /> : <Copy className="w-3.5 h-3.5" />}
+            <span>{copied ? 'Copied' : 'Copy Hash'}</span>
+          </button>
         </div>
       )}
     </div>
